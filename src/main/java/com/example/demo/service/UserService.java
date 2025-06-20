@@ -15,30 +15,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+	private final UserRepository userRepository;
+	private final UserMapper userMapper;
 
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toDto)
-                .toList();
-    }
+	// 全件取得
+	public List<UserDto> getAllUsers() {
+		return userRepository.findAll().stream()
+				.map(userMapper::toDto)
+				.toList();
+	}
 
-    public Optional<UserDto> getUserById(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::toDto);
-    }
+	// idからユーザー検索
+	public Optional<UserDto> getUserById(Long id) {
+		return userRepository.findById(id)
+				.map(userMapper::toDto);
+	}
 
-    public Optional<UserDto> updateUser(Long id, UserDto dto) {
-        return userRepository.findById(id).map(user -> {
-            userMapper.updateEntity(user, dto);
-            return userMapper.toDto(userRepository.save(user));
-        });
-    }
+	// 更新処理(UPDATE)
+	public Optional<UserDto> updateUser(Long id, UserDto dto) {
+		return userRepository.findById(id).map(user -> {
+			userMapper.updateEntity(user, dto);
+			return userMapper.toDto(userRepository.save(user));
+		});
+	}
 
-    public Optional<UserDto> getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .map(userMapper::toDto);
-    }
+	// Emailからユーザー検索
+	public Optional<UserDto> getUserByEmail(String email) {
+		return userRepository.findByEmail(email)
+				.map(userMapper::toDto);
+	}
 
 }

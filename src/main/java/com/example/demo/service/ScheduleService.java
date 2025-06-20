@@ -19,42 +19,48 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleService {
 
-    private final ScheduleRepository scheduleRepository;
-    private final UserRepository userRepository;
-    private final ScheduleMapper scheduleMapper;
+	private final ScheduleRepository scheduleRepository;
+	private final UserRepository userRepository;
+	private final ScheduleMapper scheduleMapper;
 
-    public List<ScheduleResponseDto> getSchedules(Optional<Long> userId) {
-        List<Schedule> schedules = userId
-                .map(id -> scheduleRepository.findByParticipants_Id(id))
-                .orElseGet(scheduleRepository::findAll);
+	// 全件取得
+	public List<ScheduleResponseDto> getSchedules(Optional<Long> userId) {
+		List<Schedule> schedules = userId
+				.map(id -> scheduleRepository.findByParticipants_Id(id))
+				.orElseGet(scheduleRepository::findAll);
 
-        return schedules.stream()
-                .map(scheduleMapper::toDto)
-                .toList();
-    }
+		return schedules.stream()
+				.map(scheduleMapper::toDto)
+				.toList();
+	}
 
-    public Optional<ScheduleResponseDto> getScheduleById(Long id) {
-        return scheduleRepository.findById(id)
-                .map(scheduleMapper::toDto);
-    }
+	// idからスケジュール検索
+	public Optional<ScheduleResponseDto> getScheduleById(Long id) {
+		return scheduleRepository.findById(id)
+				.map(scheduleMapper::toDto);
+	}
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, User createdUser) {
-        List<User> participants = userRepository.findAllById(dto.getParticipantIds());
-        Schedule schedule = scheduleMapper.toEntity(dto, participants, createdUser);
-        return scheduleMapper.toDto(scheduleRepository.save(schedule));
-    }
+	// スケジュール作成(CREATE)
+	public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, User createdUser) {
+		List<User> participants = userRepository.findAllById(dto.getParticipantIds());
+		Schedule schedule = scheduleMapper.toEntity(dto, participants, createdUser);
+		return scheduleMapper.toDto(scheduleRepository.save(schedule));
+	}
 
-    public Optional<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto dto) {
-        return scheduleRepository.findById(id).map(schedule -> {
-            List<User> participants = userRepository.findAllById(dto.getParticipantIds());
-            scheduleMapper.updateEntity(schedule, dto, participants);
-            return scheduleMapper.toDto(scheduleRepository.save(schedule));
-        });
-    }
+	// スケジュール更新(UPDATE)
+	public Optional<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto dto) {
+		return scheduleRepository.findById(id).map(schedule -> {
+			List<User> participants = userRepository.findAllById(dto.getParticipantIds());
+			scheduleMapper.updateEntity(schedule, dto, participants);
+			return scheduleMapper.toDto(scheduleRepository.save(schedule));
+		});
+	}
 
-    public boolean deleteSchedule(Long id) {
-        if (!scheduleRepository.existsById(id)) return false;
-        scheduleRepository.deleteById(id);
-        return true;
-    }
+	// 削除(DELETE)
+	public boolean deleteSchedule(Long id) {
+		if (!scheduleRepository.existsById(id))
+			return false;
+		scheduleRepository.deleteById(id);
+		return true;
+	}
 }
