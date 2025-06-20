@@ -14,7 +14,7 @@ public class ScheduleRequestDto {
 
     private LocalDateTime startDateTime;
 
-    private LocalDateTime endDateTime;
+    private LocalDateTime EndDateTime;
 
     // 参加者のユーザーIDリスト（Vueから送られる）
     private List<Long> participantIds;
