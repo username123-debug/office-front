@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Spring Security用のユーザー情報を返す
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                user.getPassword(),
+                user.getPasswordHash(),
                 authorities
         );
     }
