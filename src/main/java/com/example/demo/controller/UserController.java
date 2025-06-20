@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.dto.common.UserDto;
+import com.example.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,38 +26,34 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     // 全ユーザー取得（管理者用）
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // ユーザー詳細取得（マイページなど）
+    // ユーザー詳細取得
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id)
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ユーザー更新（自己紹介など）
+    // ユーザー更新
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable Long id,
-            @RequestBody User updatedUserData) {
+            @RequestBody UserDto dto) {
 
-        return userRepository.findById(id).map(user -> {
-            user.setName(updatedUserData.getName());
-//            user.setDepartment(updatedUserData.getDepartment());
-//            user.setIntroduction(updatedUserData.getIntroduction());
-//            user.setImagePath(updatedUserData.getImagePath());
-            return ResponseEntity.ok(userRepository.save(user));
-        }).orElse(ResponseEntity.notFound().build());
+        return userService.updateUser(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-    
+
+    // ログイン中のユーザー取得
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -66,7 +61,8 @@ public class UserController {
         }
 
         String email = authentication.getName();
-        Optional<User> userOpt = userRepository.findByEmail(email);
+
+        Optional<UserDto> userOpt = userService.getUserByEmail(email);
 
         if (userOpt.isPresent()) {
             return ResponseEntity.ok(userOpt.get());
@@ -76,7 +72,4 @@ public class UserController {
         }
     }
 
-
-    
 }
-
