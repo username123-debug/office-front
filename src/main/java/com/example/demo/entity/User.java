@@ -38,6 +38,8 @@ public class User {
     @ManyToMany(mappedBy = "participants")
     private List<Schedule> schedules;
     
+//    @ManyToOne
+//    private Role role;
     
     private LocalDateTime joinedAt;
     private String department;
