@@ -4,103 +4,72 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.request.ScheduleRequestDto;
-import com.example.demo.entity.Schedule;
+import com.example.demo.dto.response.ScheduleResponseDto;
 import com.example.demo.entity.User;
-import com.example.demo.repository.ScheduleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/schedules")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173") // Vue側と連携するため
+@CrossOrigin(origins = "http://localhost:5173")
 public class ScheduleController {
 
-    private final ScheduleRepository scheduleRepository;
+    private final ScheduleService scheduleService;
     private final UserRepository userRepository;
 
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedules(
+            @RequestParam(required = false) Long userId) {
+        return ResponseEntity.ok(scheduleService.getSchedules(Optional.ofNullable(userId)));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSchedule(@PathVariable Long id) {
+        return scheduleService.getScheduleById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
-    public ResponseEntity<?> createSchedule(@RequestBody ScheduleRequestDto dto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+            @RequestBody ScheduleRequestDto dto,
+            Authentication authentication) {
 
-        // 参加者のUserをIDから取得
-        List<User> participants = userRepository.findAllById(dto.getParticipantIds());
+        String email = authentication.getName();
+        User createdUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません"));
 
-        // Scheduleエンティティに詰める
-        Schedule schedule = new Schedule();
-        schedule.setTitle(dto.getTitle());
-        schedule.setDescription(dto.getDescription());
-        schedule.setStartDateTime(dto.getStartDateTime());
-        schedule.setEndDateTime(dto.getEndDateTime());
-        schedule.setParticipants(participants);
-
-        // 保存
-        Schedule saved = scheduleRepository.save(schedule);
-
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(scheduleService.createSchedule(dto, createdUser));
     }
-    
-//    @GetMapping
-//    public ResponseEntity<List<Schedule>> getSchedules(@RequestParam(required = false) Long userId) {
-//        List<Schedule> schedules;
-//
-//        if (userId != null) {
-//            // 特定ユーザーの予定一覧（参加しているもの）
-//            schedules = scheduleRepository.findByParticipants_Id(userId);
-//        } else {
-//            // 全スケジュール
-//            schedules = scheduleRepository.findAll();
-//        }
-//
-//        return ResponseEntity.ok(schedules);
-    
-    
-    //更新
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto dto) {
-        Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
-
-        if (optionalSchedule.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Schedule schedule = optionalSchedule.get();
-
-        // 参加者をIDから取得
-        List<User> participants = userRepository.findAllById(dto.getParticipantIds());
-
-        // 更新内容をセット
-        schedule.setTitle(dto.getTitle());
-        schedule.setDescription(dto.getDescription());
-        schedule.setStartDateTime(dto.getStartDateTime());
-        schedule.setEndDateTime(dto.getEndDateTime());
-        schedule.setParticipants(participants);
-
-        return ResponseEntity.ok(scheduleRepository.save(schedule));
-        
+    public ResponseEntity<?> updateSchedule(
+            @PathVariable Long id,
+            @RequestBody ScheduleRequestDto dto) {
+        return scheduleService.updateSchedule(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-    
-    //削除
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable Long id) {
-        if (!scheduleRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        scheduleRepository.deleteById(id);
-        return ResponseEntity.ok("削除しました");
+        boolean deleted = scheduleService.deleteSchedule(id);
+        return deleted ? ResponseEntity.ok("削除しました") : ResponseEntity.notFound().build();
     }
-
-
 }
-
