@@ -36,8 +36,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/login/**").permitAll() //もしもログイン後のURLであれば、.requestMatchers().authenticated() 
                 .requestMatchers(  "/users/**" ) .authenticated()       // ユーザー系（/me, /{id}, /users など）
                 .requestMatchers( "/schedules/**") .authenticated() 	// スケジュール系
+                .requestMatchers( "/Info/**") .authenticated()       // お知らせ一覧・登録・削除など
                 .requestMatchers( "/attendance/**" ) .authenticated()   // 勤怠打刻API（出勤・退勤）（未実装）
-                .requestMatchers( "/notices/**") .authenticated()       // お知らせ一覧・登録・削除など（未実装)
+                .requestMatchers( "/notices/**") .authenticated()       // お知らせ一覧・登録・削除など
                 .anyRequest()
                 .authenticated()
             )
