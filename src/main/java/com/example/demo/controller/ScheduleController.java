@@ -45,5 +45,19 @@ public class ScheduleController {
 
         return ResponseEntity.ok(saved);
     }
+    
+//    @GetMapping
+//    public ResponseEntity<List<Schedule>> getSchedules(@RequestParam(required = false) Long userId) {
+//        List<Schedule> schedules;
+//
+//        if (userId != null) {
+//            // 特定ユーザーの予定一覧（参加しているもの）
+//            schedules = scheduleRepository.findByParticipants_Id(userId);
+//        } else {
+//            // 全スケジュール
+//            schedules = scheduleRepository.findAll();
+//        }
+//
+//        return ResponseEntity.ok(schedules);
 }
 
