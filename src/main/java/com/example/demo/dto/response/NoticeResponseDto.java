@@ -2,12 +2,12 @@ package com.example.demo.dto.response;
 
 import java.time.LocalDateTime;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class NoticeResponseDto {
 	private String title;
-	private String boby;
+	private String body;
 	private LocalDateTime createdAt;
 	private Long createdUserId;
 }
