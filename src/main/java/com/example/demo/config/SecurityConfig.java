@@ -13,6 +13,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.demo.service.CustomUserDetailsService;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -24,6 +26,8 @@ public class SecurityConfig {
 	private final CustomLoginFailureHandler customLoginFailureHandler;
 	@Autowired
 	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+	@Autowired
+	private final CustomUserDetailsService customUserDetailService;
 	
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,6 +52,7 @@ public class SecurityConfig {
                 .failureHandler(customLoginFailureHandler) //ログイン失敗時の処理 
                 .permitAll()
             )
+            .userDetailsService(customUserDetailService)
             .logout(logout -> logout
             		.logoutUrl("/logout")
             		.logoutSuccessHandler(customLogoutSuccessHandler) //ログアウト時の処理 
