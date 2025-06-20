@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .requestMatchers( "/notices/**") .authenticated()       // お知らせ一覧・登録・削除など
                 .anyRequest()
                 .authenticated()
-            
+            )
             .formLogin(form -> form
                 .loginProcessingUrl("/api/login")
                 .successHandler(customLoginSuccessHandler) //ログイン成功時の処理 
