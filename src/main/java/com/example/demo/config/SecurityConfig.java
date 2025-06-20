@@ -67,5 +67,6 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+		// passwordEncoder()メソッドを使えば、passwordをハッシュ化できる。@Beanなので、DI可能。 
 	}
 }
