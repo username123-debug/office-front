@@ -33,18 +33,18 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))//iframeの設定。H2データベースを使うには必要 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/api/login/**").permitAll()
+                .requestMatchers("/api/login/**").permitAll() //もしもログイン後のURLであれば、.requestMatchers().authenticated() 
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginProcessingUrl("/api/login")
-                .successHandler(customLoginSuccessHandler)
-                .failureHandler(customLoginFailureHandler)
+                .successHandler(customLoginSuccessHandler) //ログイン成功時の処理 
+                .failureHandler(customLoginFailureHandler) //ログイン失敗時の処理 
                 .permitAll()
             )
             .logout(logout -> logout
             		.logoutUrl("/logout")
-            		.logoutSuccessHandler(customLogoutSuccessHandler)
+            		.logoutSuccessHandler(customLogoutSuccessHandler) //ログアウト時の処理 
             		.permitAll()
             );
 
