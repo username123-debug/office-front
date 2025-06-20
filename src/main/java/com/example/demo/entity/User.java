@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,14 +10,12 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -29,10 +26,9 @@ public class User {
 
     private String name;
 
-    @Column(unique = true)
     private String email;
 
-    private String password;
+    private String passwordHash;
 
     private String role;  // "USER" or "ADMIN"
 

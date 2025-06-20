@@ -1,13 +1,11 @@
-package com.example.demo.dto;
+package com.example.demo.dto.request;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ScheduleRequestDto {
 
     private String title;
