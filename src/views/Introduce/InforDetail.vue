@@ -179,4 +179,9 @@ const goToEdit = () => {
   margin-top: 40px;
   padding: 8px 16px;
 }
+.right-column p {
+  margin-bottom: 32px;
+  line-height: 2; 
+  font-size: 20px;
+}
 </style>
