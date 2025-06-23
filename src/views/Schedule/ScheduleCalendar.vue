@@ -3,16 +3,18 @@
     <div class="calendar-header">
       <div class="calendar-title">{{ currentYear }}年{{ currentMonth }}月</div>
       <div class="calendar-buttons">
-        <button @click="goPrev">< 前月</button>
+        <button @click="goPrev">&lt; 前月</button>
         <button @click="goToday">今月</button>
-        <button @click="goNext">翌月 ></button>
+        <button @click="goNext">翌月 &gt;</button>
       </div>
     </div>
-    <FullCalendar
-      ref="calendarRef"
-      :options="calendarOptions"
-      :events="events"
-    />
+    <div class="calendar-wrapper">
+      <FullCalendar
+        ref="calendarRef"
+        :options="calendarOptions"
+        :events="events"
+      />
+    </div>
   </div>
 </template>
 
@@ -29,6 +31,15 @@ export default {
       currentMonth: '',
       events: [],
       calendarOptions: {
+        dayCellDidMount: arg => {
+          const day = arg.date.getDay()
+          if (day === 0) {
+            arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-sunday-bg')
+          }
+          if (day === 6) {
+            arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-saturday-bg')
+          }
+        },
         plugins: [dayGridPlugin],
         initialView: 'dayGridMonth',
         locale: 'ja',
@@ -43,7 +54,7 @@ export default {
           const d = new Date(arg.event.start)
           const hh = String(d.getHours()).padStart(2, '0')
           const mm = String(d.getMinutes()).padStart(2, '0')
-          return { html: `<span>${hh}:${mm} ${arg.event.title}</span>` }
+          return { html: `<div class='fc-custom-event'>${hh}:${mm}<br>${arg.event.title}</div>` }
         }
       }
     }
@@ -54,14 +65,13 @@ export default {
       ? mockSchedules.filter(s => s.created_by === userId)
       : mockSchedules
     this.events = list.map(item => ({
-      id:    item.id.toString(),
+      id: item.id.toString(),
       title: item.title,
       start: item.date_time_start,
-      end:   item.date_time_end
+      end: item.date_time_end
     }))
     this.$nextTick(() => {
-      const api = this.$refs.calendarRef.getApi()
-      api.setOption('events', this.events)
+      this.$refs.calendarRef.getApi().setOption('events', this.events)
     })
   },
   methods: {
@@ -89,22 +99,26 @@ export default {
   margin: 0 auto;
   padding: 24px;
 }
+
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
+
 .calendar-title {
   font-size: 20px;
   font-weight: bold;
   flex: 1;
   text-align: center;
 }
+
 .calendar-buttons {
   display: flex;
   gap: 8px;
 }
+
 .calendar-buttons button {
   background-color: #2c3e50;
   color: white;
@@ -114,13 +128,28 @@ export default {
   font-size: 14px;
   cursor: pointer;
 }
+
+.calendar-wrapper {
+  overflow-x: auto;
+  min-width: 900px;
+}
+
 .fc-event {
   cursor: pointer;
 }
-.fc-day-sun {
-  background-color: #ffe5e5;
+
+.fc-sunday-bg {
+  background-color: #ffe5e5 !important;
 }
-.fc-day-sat {
-  background-color: #e5f0ff;
+
+.fc-saturday-bg {
+  background-color: #e5f0ff !important;
+}
+
+.fc-custom-event {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
 }
 </style>
