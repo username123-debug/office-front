@@ -66,7 +66,7 @@ const employees = [
       <hr class="separator" />
       <!-- 区切り線 -->
       <hr class="separator" />
-      <RouterLink :to="`/introduce/detail/${employee.id}`" class="employee-name">
+        <RouterLink :to="`/detail/${employee.id}`" class="employee-name">
           {{ employee.name }}
       </RouterLink>
       <!-- 区切り線 -->
@@ -91,6 +91,7 @@ const employees = [
 /* 左サイドバー */
 .sidebar {
   width: 250px;
+  height: 180vh;
   background-color: #79BD9A;
   color: white;
   padding: 20px;
@@ -152,6 +153,10 @@ const employees = [
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 6px;
+  border: 1px solid #757575;
+  /* 右 + 下だけ太くする（上書き） */
+  border-right: 6px solid #757575;
+  border-bottom: 6px solid #757575;
 }
 
 /* 小見出し */
@@ -177,20 +182,31 @@ const employees = [
 }
 
 .employee-card {
+  position: relative;
   overflow: hidden;
   width: 180px;       /* 横幅小さめ */
   height: 260px;      /* 縦長にする */
   background: white;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   padding: 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border: 1px solid #A8DBA8;
   /* 右 + 下だけ太くする（上書き） */
-  border-right: 6px solid #A8DBA8;
-  border-bottom: 6px solid #A8DBA8;
+  /* border-right: 6px solid #A8DBA8;
+  border-bottom: 6px solid #A8DBA8; */
   display: flex;
   flex-direction: column; /* ← 縦並びに変更 */
   align-items: center; /* 中央揃え */
+}
+.employee-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-bottom: 30px solid #A8DBA8;  /* ← 三角の色 */
 }
 
 .employee-card:hover {
