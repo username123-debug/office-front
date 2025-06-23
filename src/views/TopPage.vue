@@ -11,7 +11,7 @@
         <button>📢 お知らせ</button>
       </router-link>
 
-      <router-link to="/members">
+      <router-link to="/introduce">
         <button>👥 社員紹介</button>
       </router-link>
     </div>
