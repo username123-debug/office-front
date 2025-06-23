@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header>
+    <header v-if="isSchedulePage">
       <h1>📅 スケジュール管理</h1>
       <nav>
         <router-link to="/overview">総覧</router-link> |
@@ -34,3 +34,15 @@ nav a.router-link-exact-active {
   text-decoration: underline;
 }
 </style>
+<script setup>
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+
+const isSchedulePage = computed(() =>
+  route.path.startsWith('/schedule') ||
+  route.path.startsWith('/overview') ||
+  route.path.startsWith('/calendar')
+)
+</script>
