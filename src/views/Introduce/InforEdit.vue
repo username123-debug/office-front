@@ -2,9 +2,9 @@
 import { useRoute,useRouter } from 'vue-router'
 
 import { ref } from 'vue'
-import cloudImg from '@/assets/cloud.png'
+import backgroundImg from '@/assets/anh nen.jpg'
 const backgroundStyle = {
-  backgroundImage: `url(${cloudImg})`,
+  backgroundImage: `url(${backgroundImg})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',

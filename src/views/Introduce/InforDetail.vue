@@ -6,6 +6,15 @@ import photo003 from '@/assets/sun.jpg'
 import photo004 from '@/assets/sunflower.jpg'
 import photo005 from '@/assets/sunflower2.jpg'
 import photo006 from '@/assets/cloud.png'
+import backgroundImg from '@/assets/anh nen.jpg'
+const backgroundStyle = {
+  backgroundImage: `url(${backgroundImg})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  height: '100vh',
+  width:'100vw',
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -61,6 +70,7 @@ const goToEdit = () => {
 <template>
   <div class="container">
     <!-- 左側：サイドバー -->
+
     <aside class="sidebar">
       <h2>社員紹介</h2>
       <ul class="menu">
@@ -88,16 +98,16 @@ const goToEdit = () => {
      <div class="curved-line-wrapper">
   <svg width="40" height="500" viewBox="0 0 40 500" xmlns="http://www.w3.org/2000/svg">
     <path
-      d="M 5 0 Q 65 200, 5 400"
+      d="M 5 0 Q 73 250, 5 500"
       fill="none"
-      stroke="#4977d8"
+      stroke="#757575"
       stroke-width="2"
     />
   </svg>
 </div>
 
       <div class="right-column">
-        <p class="info-item1" style="margin-top: 160px;"><strong>◆入社年月：</strong> {{ employee.joinDate }}</p>
+        <p class="info-item1" style="margin-top: 100px;"><strong>◆入社年月：</strong> {{ employee.joinDate }}</p>
         <p class="info-item2" style="margin-top: 60px;"><strong>◆部署：</strong> {{ employee.department }}</p>
         <p class="info-item3" style="margin-top: 60px;"><strong>◆趣味：</strong> {{ employee.hobby }}</p>
         <p class="info-item4" style="margin-top: 60px;"><strong>◆メッセージ：</strong><br /> {{ employee.intro }}</p>
@@ -157,19 +167,19 @@ const goToEdit = () => {
 .detail-wrapper {
   display: flex;
   gap: 24px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 /* 左側：写真＋名前 */
 .left-column {
   width: 300px;
   text-align: center;
-  margin-top:250px
+  /* margin-top:100px */
 }
 
 .small-photo {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
    object-fit: cover; 
   margin-bottom: 12px;
@@ -182,6 +192,7 @@ const goToEdit = () => {
 }
 .right-column {
   /* padding-left: 20px; */
+  flex: 1;
   font-size: 16px;
   color: #333;
 }
@@ -194,12 +205,14 @@ const goToEdit = () => {
   margin-left:30px;
 }
 .curved-line-wrapper {
-  width: 40px;
+  /* width: 40px;
   height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 100px 50px;
+  margin: 100px 20px; */
+  height: 500px;
+  margin: 0 20px;
 }
 
 </style>
