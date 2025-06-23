@@ -8,14 +8,19 @@ import ScheduleEdit from '../views/Schedule/ScheduleEdit.vue'
 import ScheduleAdd from '../views/Schedule/ScheduleAdd.vue'
 import ScheduleOverview from '../views/Schedule/ScheduleOverview.vue'
 
-
 // お知らせ
 const NoticeView = () => import('../views/Notice/NoticeView.vue')
 const NoticeDetailView = () => import('../views/Notice/NoticeDetailView.vue')
 const NoticeAddView = () => import('../views/Notice/NoticeAddView.vue')
 
+// 社員紹介
+import InforList from '../views/Introduce/InforList.vue'
+import InforDetail from '../views/Introduce/InforDetail.vue'
+import InforEdit from '../views/Introduce/InforEdit.vue'
+
 const routes = [
- { path: '/', name: 'TopPage', component: TopPage },
+  // トップページ
+  { path: '/', name: 'TopPage', component: TopPage },
 
   // スケジュール
   { path: '/overview', name: 'Overview', component: ScheduleOverview },
@@ -28,6 +33,11 @@ const routes = [
   { path: '/notice', name: 'NoticeView', component: NoticeView },
   { path: '/detail', name: 'NoticeDetail', component: NoticeDetailView },
   { path: '/addnotice', name: 'NoticeAdd', component: NoticeAddView },
+
+  // 社員紹介
+  { path: '/introduce', name: 'IntroduceList', component: InforList },
+  { path: '/introduce/detail/:id', name: 'IntroduceDetail', component: InforDetail },
+  { path: '/introduce/edit/:id', name: 'IntroduceEdit', component: InforEdit }
 ]
 
 const router = createRouter({
