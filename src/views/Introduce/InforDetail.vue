@@ -70,7 +70,7 @@ const goToEdit = () => {
 <template>
   <div class="container">
     <!-- 左側：サイドバー -->
-
+<div class="edit-page":style="backgroundStyle"></div>
     <aside class="sidebar">
       <h2>社員紹介</h2>
       <ul class="menu">
@@ -172,7 +172,7 @@ const goToEdit = () => {
 
 /* 左側：写真＋名前 */
 .left-column {
-  width: 300px;
+  width: 250px;
   text-align: center;
   /* margin-top:100px */
 }
@@ -193,6 +193,7 @@ const goToEdit = () => {
 .right-column {
   /* padding-left: 20px; */
   flex: 1;
+  min-width: 400px;  /* ← ここで自動折り返しを防止 */
   font-size: 16px;
   color: #333;
 }
