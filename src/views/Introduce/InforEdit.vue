@@ -32,7 +32,7 @@ const handleSubmit = () => {
   })
    // 変更した内容を持って戻る
   router.push({
-    name: 'Detail',
+    name: 'IntroduceDetail',
     params: { id },  // 必ずIDを戻す
     query: {
       name: name.value,

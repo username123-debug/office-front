@@ -64,7 +64,7 @@ const goToEdit = () => {
     <aside class="sidebar">
       <h2>社員紹介</h2>
       <ul class="menu">
-        <li><router-link to="/">ホーム</router-link></li>
+        <li><router-link to="/introduce">ホーム</router-link></li>
         <li><a href="#">新入社員</a></li>
         <li><a href="#">営業部門</a></li>
         <li><a href="#">人事部門</a></li>
