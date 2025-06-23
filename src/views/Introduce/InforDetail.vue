@@ -67,7 +67,6 @@ const goToEdit = () => {
 
   <div class="container">
     <!-- 左側：サイドバー -->
-<div class="edit-page":style="backgroundStyle"></div>
   <div class="container" :style="backgroundStyle">
 
     <aside class="sidebar">
