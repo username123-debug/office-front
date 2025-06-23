@@ -56,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .edit-container {
   max-width: 600px;
   margin: 30px auto;

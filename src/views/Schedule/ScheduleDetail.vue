@@ -1,25 +1,20 @@
 <template>
-  <div class="content">
-    <div class="detail-container" v-if="schedule">
-      <h2>📝 スケジュール詳細</h2>
-      <p><strong>タイトル：</strong>{{ schedule.title }}</p>
-      <p><strong>時間：</strong>{{ formatTime(schedule.date_time_start) }} ～ {{ formatTime(schedule.date_time_end) }}</p>
-      <p><strong>作成者：</strong>{{ schedule.created_by_name }}</p>
-      <p><strong>内容：</strong>{{ schedule.body }}</p>
-
-      <div class="button-row">
-        <button @click="goBack">← 戻る</button>
-        <button @click="goEdit">✏️ 編集</button>
-        <button @click="confirmDelete">🗑️ 削除</button>
-      </div>
-    </div>
-
-    <div v-else>
-      <p>スケジュールが見つかりませんでした。</p>
+  <div class="detail-container" v-if="schedule">
+    <h2>📝 スケジュール詳細</h2>
+    <p><strong>タイトル：</strong>{{ schedule.title }}</p>
+    <p><strong>時間：</strong>{{ formatTime(schedule.date_time_start) }} ～ {{ formatTime(schedule.date_time_end) }}</p>
+    <p><strong>作成者：</strong>{{ schedule.created_by_name }}</p>
+    <p><strong>内容：</strong>{{ schedule.body }}</p>
+    <div class="button-row">
+      <button @click="goBack">← 戻る</button>
+      <button @click="goEdit">✏️ 編集</button>
+      <button @click="confirmDelete">🗑️ 削除</button>
     </div>
   </div>
+  <div v-else>
+    <p>スケジュールが見つかりませんでした。</p>
+  </div>
 </template>
-
 
 <script>
 import { mockSchedules } from '../../mock/schedules'
@@ -59,15 +54,10 @@ export default {
 }
 </script>
 
-<style>
-.content {
-  max-width: 960px;
-  margin-left: 24px;
-  margin-right: auto;
-  padding-bottom: 40px;
-}
-
+<style scoped>
 .detail-container {
+  max-width: 960px;
+  margin: 0 auto;
   padding: 24px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -93,6 +83,4 @@ button {
 button:hover {
   background-color: #2563eb;
 }
-
-
 </style>

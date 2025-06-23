@@ -1,27 +1,25 @@
 <template>
-  <div class="form-page">
-    <div class="add-container">
-      <h2 class="form-title">➕ 新規スケジュール登録</h2>
+  <div class="add-container">
+    <h2 class="form-title">➕ 新規スケジュール登録</h2>
 
-      <label>タイトル：</label>
-      <input v-model="form.title" type="text" />
+    <label>タイトル：</label>
+    <input v-model="form.title" type="text" />
 
-      <label>開始日時：</label>
-      <input v-model="form.date_time_start" type="datetime-local" />
+    <label>開始日時：</label>
+    <input v-model="form.date_time_start" type="datetime-local" />
 
-      <label>終了日時：</label>
-      <input v-model="form.date_time_end" type="datetime-local" />
+    <label>終了日時：</label>
+    <input v-model="form.date_time_end" type="datetime-local" />
 
-      <label>内容：</label>
-      <textarea v-model="form.body"></textarea>
+    <label>内容：</label>
+    <textarea v-model="form.body"></textarea>
 
-      <label>作成者：</label>
-      <input v-model="form.created_by_name" type="text" />
+    <label>作成者：</label>
+    <input v-model="form.created_by_name" type="text" />
 
-      <div class="button-row">
-        <button @click="goBack">キャンセル</button>
-        <button @click="submit">登録</button>
-      </div>
+    <div class="button-row">
+      <button @click="goBack">キャンセル</button>
+      <button @click="submit">登録</button>
     </div>
   </div>
 </template>
@@ -51,28 +49,17 @@ export default {
 }
 </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-}
-
-.form-page {
-  display: flex;
-  justify-content: center;
-  padding: 2rem 1rem;
-}
-
+<style scoped>
 .add-container {
-  width: 100%;
-  max-width: 36rem;
-  padding: 2rem;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 24px;
   border: 1px solid #ccc;
-  border-radius: 1rem;
+  border-radius: 8px;
   background: #fefefe;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 12px;
 }
 
 .form-title {
