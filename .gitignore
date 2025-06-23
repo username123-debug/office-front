@@ -56,3 +56,8 @@ bin/
 *.sln
 *.sw?
 *.tsbuildinfo
+
+.gradle/
+*.lock
+*.bin
+build/
