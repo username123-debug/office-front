@@ -41,11 +41,11 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push('/')
+      this.$router.push('/overview')
     },
     submit() {
       alert('登録しました（※ 実際には保存されません）')
-      this.$router.push('/')
+      this.$router.push('/overview')
     }
   }
 }

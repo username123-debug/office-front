@@ -45,14 +45,14 @@ export default {
       return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
     },
     goBack() {
-      this.$router.push('/')
+      this.$router.push('/overview')
     },
     goEdit() {
       this.$router.push(`/schedule/${this.schedule.id}/edit`)
     },
     confirmDelete() {
       if (confirm('本当に削除しますか？')) {
-        this.$router.push('/')
+        this.$router.push('/overview')
       }
     }
   }
