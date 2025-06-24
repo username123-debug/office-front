@@ -83,15 +83,6 @@ const goToEdit = () => {
     </aside>
     <main class="content">
       <div class="detail-wrapper">
-        <div class="left-column">
-          <img :src="employee.photo" alt="写真" class="small-photo" />
-          <h1>{{ employee.name }}</h1>
-        </div>
-        <div class="curved-line-wrapper">
-          <svg width="40" height="500" viewBox="0 0 40 500" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 5 0 Q 73 250, 5 500" fill="none" stroke="#757575" stroke-width="2"/>
-          </svg>
-        </div>
         <div class="right-column">
           <p class="info-item1"><strong>◆入社年月：</strong>{{ employee.joinDate }}</p>
           <p class="info-item2"><strong>◆部署：</strong>{{ employee.department }}</p>
@@ -99,6 +90,16 @@ const goToEdit = () => {
           <p class="info-item4"><strong>◆メッセージ：</strong><br />{{ employee.intro }}</p>
           <button class="edit-button" @click="goToEdit">▶ 編集</button>
         </div>
+        <div class="left-column">
+          <img :src="employee.photo" alt="写真" class="small-photo" />
+          <h1>{{ employee.name }}</h1>
+        </div>
+        <!-- <div class="curved-line-wrapper">
+          <svg width="40" height="500" viewBox="0 0 40 500" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 5 0 Q 73 250, 5 500" fill="none" stroke="#757575" stroke-width="2"/>
+          </svg>
+        </div> -->
+        
       </div>
       <RouterView/>
     </main>
@@ -114,7 +115,7 @@ const goToEdit = () => {
 }
 .sidebar {
   width: 250px;
-  background-color: #79BD9A;
+  background-color: #129350;
   color: white;
   padding: 20px;
   overflow-y: auto;
@@ -153,6 +154,7 @@ const goToEdit = () => {
 .left-column {
   width: 250px;
   text-align: center;
+  margin-right:110px;
 }
 .small-photo {
   width: 250px;
