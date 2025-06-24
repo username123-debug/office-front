@@ -3,9 +3,9 @@
     <div class="calendar-header">
       <div class="calendar-title">{{ currentYear }}年{{ currentMonth }}月</div>
       <div class="calendar-buttons">
-        <button @click="goPrev">&lt; 前月</button>
+        <button @click="goPrev">< 前月</button>
         <button @click="goToday">今月</button>
-        <button @click="goNext">翌月 &gt;</button>
+        <button @click="goNext">翌月 ></button>
       </div>
     </div>
     <div class="calendar-wrapper">

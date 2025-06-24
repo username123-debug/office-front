@@ -1,6 +1,6 @@
 <template>
   <div class="edit-container" v-if="form">
-    <h2>✏️ スケジュール編集</h2>
+    <h2>スケジュール編集</h2>
 
     <label>タイトル：</label>
     <input v-model="form.title" type="text" />

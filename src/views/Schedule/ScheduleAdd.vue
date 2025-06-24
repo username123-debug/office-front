@@ -1,6 +1,6 @@
 <template>
   <div class="add-container">
-    <h2 class="form-title">➕ 新規スケジュール登録</h2>
+    <h2 class="form-title">新規スケジュール登録</h2>
 
     <label>タイトル：</label>
     <input v-model="form.title" type="text" />
