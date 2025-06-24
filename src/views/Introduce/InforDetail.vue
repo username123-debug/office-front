@@ -1,5 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
+import { ref, computed, } from 'vue'
 import photo001 from '@/assets/sky.jpg'
 import photo002 from '@/assets/summer.jpg'
 import photo003 from '@/assets/sun.jpg'
@@ -29,8 +30,8 @@ const employeeData = [
   { id: '005', name: '伊藤 三郎', department: '生産部門', intro: '生産ラインを担当しています。', photo: photo005 },
   { id: '006', name: '高橋 四郎', department: '営業部', intro: '営業戦略を担当しています。', photo: photo006 }
 ]
-
-let employee = employeeData.find(emp => emp.id === id) || {
+const employees = ref(employeeData)
+let employee = employees.value.find(emp => emp.id === id) || {
   name: '不明',
   joinDate: '',
   department: '不明',
@@ -61,6 +62,18 @@ const goToEdit = () => {
     }
   })
 }
+const showSubMenu = ref(false)
+const toggleSubMenu = () => {
+  showSubMenu.value = !showSubMenu.value
+}
+
+const selectedDepartment = ref('')
+
+const filteredEmployees = computed(() =>
+  selectedDepartment.value
+    ? employees.value.filter(e => e.department === selectedDepartment.value)
+    : employees.value
+)
 </script>
 
 <template>
@@ -68,19 +81,69 @@ const goToEdit = () => {
   <div class="container">
     <!-- 左側：サイドバー -->
   <div class="container" :style="backgroundStyle">
+    
 
     <aside class="sidebar">
       <h2>社員紹介</h2>
       <ul class="menu">
-        <li><router-link to="/introduce">ホーム</router-link></li>
+         <li><router-link to="/introduce">ホーム</router-link></li>
         <li><a href="#">新入社員</a></li>
-        <li><a href="#">営業部門</a></li>
-        <li><a href="#">人事部門</a></li>
-        <li><a href="#">財務部門</a></li>
-        <li><a href="#">生産部門</a></li>
-        <li><a href="#">IT部門</a></li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>
+          <ul v-if="selectedDepartment === '営業部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '人事部'">人事部門</a>
+          <ul v-if="selectedDepartment === '人事部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '財務部'">財務部門</a>
+          <ul v-if="selectedDepartment === '財務部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '生産部門'">生産部門</a>
+          <ul v-if="selectedDepartment === '生産部門'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部門'">IT部門</a>
+          <ul v-if="selectedDepartment === 'IT部門'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="toggleSubMenu">そのほか</a>
+          <ul v-if="showSubMenu" class="submenu">
+            <li><router-link to="/introduce/add">社員紹介追加</router-link></li>
+            <li><router-link to="/introduce/delete">社員情報削除</router-link></li>
+          </ul>
+        </li>
       </ul>
     </aside>
+
     <main class="content">
       <div class="detail-wrapper">
         <div class="right-column">
@@ -94,11 +157,6 @@ const goToEdit = () => {
           <img :src="employee.photo" alt="写真" class="small-photo" />
           <h1>{{ employee.name }}</h1>
         </div>
-        <!-- <div class="curved-line-wrapper">
-          <svg width="40" height="500" viewBox="0 0 40 500" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 5 0 Q 73 250, 5 500" fill="none" stroke="#757575" stroke-width="2"/>
-          </svg>
-        </div> -->
         
       </div>
       <RouterView/>

@@ -17,6 +17,9 @@ const NoticeAddView = () => import('../views/Notice/NoticeAddView.vue')
 import InforList from '../views/Introduce/InforList.vue'
 import InforDetail from '../views/Introduce/InforDetail.vue'
 import InforEdit from '../views/Introduce/InforEdit.vue'
+import InforAdd from '../views/Introduce/InforAdd.vue'
+import InforDelete from '../views/Introduce/InforDelete.vue'
+
 
 const routes = [
   // トップページ
@@ -37,7 +40,9 @@ const routes = [
   // 社員紹介
   { path: '/introduce', name: 'IntroduceList', component: InforList },
   { path: '/introduce/detail/:id', name: 'IntroduceDetail', component: InforDetail },
-  { path: '/introduce/edit/:id', name: 'Edit', component: InforEdit }
+  { path: '/introduce/edit/:id', name: 'Edit', component: InforEdit },
+  { path: '/introduce/add', name: 'IntroduceAdd', component: InforAdd },
+  { path: '/introduce/delete', name: 'IntroduceDelete', component: InforDelete }
 ]
 
 const router = createRouter({
