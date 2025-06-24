@@ -13,7 +13,7 @@
     </header>
     <div class="app-layout with-header">
       <aside v-if="isSchedulePage" class="sidebar">
-        <h1>📅 スケジュール管理</h1>
+        <h1>スケジュール管理</h1>
         <nav>
           <ul>
             <li><router-link to="/overview">総覧</router-link></li>
