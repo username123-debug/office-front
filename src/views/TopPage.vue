@@ -54,7 +54,7 @@ import { ref, computed, watchEffect } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { mockSchedules } from '@/mock/schedules'
-import { mockNotices } from '@/mock/Notices'
+import { mockNotices } from '@/mock/Notice'
 
 const currentFirstDay = ref(getTodayStart())
 const calendarOptions = ref({})
