@@ -1,45 +1,48 @@
 <script setup>
-  // import axios from 'axios';
-  // import { ref, reactive } from 'vue';
+  import axios from 'axios';
+  import { ref, reactive, onMounted } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import api from '@/plugin/axios.js';
 
-  // const data = reactive({
-  //   title: '',
-  //   body: '',
-  //   createdAt: '',
-  //   writer: '',
-  // });
+  const notice = reactive({
+    id: null,
+    title: '',
+    body: '',
+    createdAt: '',
+    createdUserName: '',
+  });
 
-  // const updateId = ref();
-  
-  // const{
-  //   notices,
-  //   get
-  // } = getNotices();
+  const router = useRouter();
+  const route = useRoute();
 
-  // const getNotices = async() => {
-  //   try{
-  //     const noticeId = route.params.id;
-  //     const res = await axios.get(``);
-  //     data.title = res.data.title;
-  //     data.body = res.data.body;
-  //     data.createdAt = res.data.createdAt;
-  //     data.writer = res.data.writer;
-  //   }catch(error){
-  //     console.error(error);
-  //   }
-  // }
+  //特定の一件を表示
+  const findNotice = async () => {
+    try {
+      const noticeId = route.params.id;
+      const res = await api.get(`/notices/${noticeId}`);
+      notice.id = res.data.id;
+      notice.title = res.data.title;
+      notice.body = res.data.body;
+      notice.createdAt = res.data.createdAt;
+      notice.createdUserName = res.data.createdUserName;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  // const update = async() =>{
-  //   try{
-  //     const url = '';
-  //     const res = await axios.put(url,data);
-  //     console.log(res.data);
-  //     data.title = '';
-  //     data.body = '';
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
+  //公開日時
+  const formatDate = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    return `${month}月${day}日${hour}:${minute}`;
+  };
+
+  onMounted(findNotice);
+
 </script>
 
 
@@ -47,24 +50,23 @@
   <div class="container2">
     <h2>お知らせ詳細</h2>
     <div class="box26">
-      <p>タイトル：<input type="text" v-model="data.title" /></p>
-      <p>本文：<textarea v-model="data.body"></textarea></p>
+      <p>タイトル:{{ notice.title }}</p>
+      <p>本文:{{ notice.body }}</p>
     </div>
     <div>
-      <p class="date">公開日時:{{ notice.createdAt }}
+      <p class="date">公開日時：{{ formatDate(notice.createdAt) }}
       </p>
-      <p class="writer">掲載者:{{notice.writer}} </p>
+      <p class="writer">掲載者:{{ notice.createdUserName }} </p>
     </div>
-    <button @click="update">編集完了</button>
+    <button @click="router.push('/editnotice')">編集へ</button>
     <div class="back">
-      <button>一覧に戻る</button>
+      <button @click="router.push('/notice')">一覧に戻る</button>
     </div>
   </div>
 </template>
 
 <style>
   .container2 {
-    border: 2px solid black;
     width: 100%;
     height: 550px;
   }
@@ -83,7 +85,6 @@
   }
 
   .main {
-    border: 2px solid black;
     padding: 2px;
     margin: 8px;
     height: 500px;
