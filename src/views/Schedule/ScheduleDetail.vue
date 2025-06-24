@@ -6,9 +6,9 @@
     <p><strong>作成者：</strong>{{ schedule.created_by_name }}</p>
     <p><strong>内容：</strong>{{ schedule.body }}</p>
     <div class="button-row">
-      <button @click="goBack">← 戻る</button>
-      <button @click="goEdit">✏️ 編集</button>
-      <button @click="confirmDelete">🗑️ 削除</button>
+      <button @click="goBack">戻る</button>
+      <button @click="goEdit">編集</button>
+      <button @click="confirmDelete">削除</button>
     </div>
   </div>
   <div v-else>
