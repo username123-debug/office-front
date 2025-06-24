@@ -2,7 +2,7 @@
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted, computed } from 'vue';
   import axios from 'axios';
-  import { getNotices } from '../../components/get/getNotices.js';
+  import api from '@/plugin/axios.js';
 
   const data = reactive({
     title: '',
@@ -11,27 +11,46 @@
     creater: '',
   });
 
-  const {
-    notices,
-    get
-  } = getNotices();
+  const notices = ref([]);
+
+  //一覧表示
+  const getNotices = async () => {
+    try {
+      const res = await api.get('/notices');
+      notices.value = res.data;
+      console.log("res: ", res)
+      console.log("res.data: ", res.data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const router = useRouter();
 
   // const currentPage = ref(1)
   // const perPage = 5
 
-
+//削除機能
   const deleteNotices = async (id) => {
     try {
-      const url = '' + id;
-      const res = await axios.delete(url);
-      await get();
+      const res = await api.delete('/notices/${id}');
+      await getNotices();
       console.log(res.data);
     } catch (error) {
-      console.log(error)
+      console.log("error: ", error)
     }
   };
+
+  //公開日時
+  const formatDate = (isoString) => {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes().toString().padStart(2, '0');
+  return `${month}月${day}日${hour}:${minute}`;
+}
   // 検索機能
   // const keyword = ref('');
   // const searchNotices = computed(() => {
@@ -57,13 +76,25 @@
   //   });
   // });
 
-  //    ページネーション  
+  //   ページネーション  
   // const paginatedNotices = computed(() => {
   //   const start = (currentPage.value - 1) * perPage
-  //   return 
+  //   return notices.value.slice(start, start + perPage)
   // })
 
-  onMounted(get);
+  // const totalPages = computed(() =>
+  //   Math.ceil(notices.value.length / perPage)
+  // )
+
+  // const prevPage = () => {
+  //   if (currentPage.value > 1) currentPage.value--
+  // }
+
+  // const nextPage = () => {
+  //   if (currentPage.value < totalPages.value) currentPage.value++
+  // }
+
+  onMounted(getNotices);
 
 </script>
 
@@ -96,10 +127,10 @@
             <tr v-for="notice in notices" :key="notice.id">
               <!-- v-for = "notice in searchNotices" 検索機能実装パターン-->
               <td>
-                {{notice.title}}
+                <router-link :to="`/detail/${notice.id}`">{{notice.title}}</router-link>
               </td>
-              <td>{{notice.createdAt}}</td>
-              <td>{{notice.creater}}</td>
+              <td>{{ formatDate(notice.createdAt) }}</td>
+              <td>{{ notice.createdUserName }}</td>
               <td><button @click="deleteNotices(notice.id)">削除</button></td>
             </tr>
           </tbody>
@@ -107,6 +138,11 @@
         <div class="add">
           <label><button @click="router.push('/addnotice')">お知らせを追加する</button></label>
         </div>
+        <!-- <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1">前へ</button>
+          <span>ページ {{ currentPage }} / {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages">次へ</button>
+        </div> -->
       </main>
     </div>
   </div>
@@ -246,19 +282,34 @@
   }
 
   .add {
-    text-align: right;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   button {
-    width: 120px;
-    height: 40px;
+    padding: 8px 16px;
     border: none;
+    background-color: #3c82f6;
     color: white;
-    background-color: rgb(15, 161, 219)
+    border-radius: 4px;
+    cursor: pointer;
   }
 
   button:hover {
-    color: #fff;
-    background-color: rgb(28, 180, 240);
+    background-color: #2563eb;
+  }
+
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>

@@ -2,25 +2,24 @@
   import axios from 'axios';
   import { reactive } from 'vue';
   import { useRouter } from 'vue-router';
+   import api from '@/plugin/axios.js';
 
   const data = reactive({
     title: '',
     body: '',
-    createdAt: '',
   });
 
   const router = useRouter();
 
-
+//記事追加
   const addNotice = async () => {
     try {
-      const url = '';
-      const res = await axios.post(url, data);
+      const url = '/notices';
+      const res = await api.post(url, data);
       console.log(res.data);
 
       data.title = '';
       data.body = '';
-      data.createdAt = '';
 
       router.push('/notice');
     } catch (error) {
