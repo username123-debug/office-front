@@ -19,14 +19,17 @@ import InforDetail from '../views/Introduce/InforDetail.vue'
 import InforEdit from '../views/Introduce/InforEdit.vue'
 import InforAdd from '../views/Introduce/InforAdd.vue'
 import InforDelete from '../views/Introduce/InforDelete.vue'
+import LoginView from '@/views/Login/LoginView.vue'
 
 
 const routes = [
+  //ログイン
+  { path: '/', name: 'Login', component: LoginView },
   // トップページ
-  { path: '/', name: 'TopPage', component: TopPage },
+  { path: '/top', name: 'TopPage', component: TopPage },
 
   // スケジュール
-  { path: '/overview', name: 'Overview', component: ScheduleOverview },
+  { path: '/schedule', name: 'Overview', component: ScheduleOverview },
   { path: '/schedule/add', name: 'ScheduleAdd', component: ScheduleAdd },
   { path: '/schedule/:id/edit', name: 'ScheduleEdit', component: ScheduleEdit },
   { path: '/schedule/:id', name: 'ScheduleDetail', component: ScheduleDetail },

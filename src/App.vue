@@ -7,8 +7,8 @@
         <router-link to="/introduce">社員紹介</router-link>
       </nav>
       <div class="header-actions">
-        <router-link to="/"><button>ホーム</button></router-link>
-        <button @click="logout">ログアウト</button>
+        <router-link to="/top"><button>ホーム</button></router-link>
+        <router-link to="/"><button>ログアウト</button></router-link>
       </div>
     </header>
     <div class="app-layout with-header">
@@ -16,7 +16,7 @@
         <h1>スケジュール管理</h1>
         <nav>
           <ul>
-            <li><router-link to="/overview">総覧</router-link></li>
+            <li><router-link to="/schedule">総覧</router-link></li>
             <li><router-link to="/calendar/self">マイカレンダー</router-link></li>
             <li><router-link to="/schedule/add">新規登録</router-link></li>
           </ul>
