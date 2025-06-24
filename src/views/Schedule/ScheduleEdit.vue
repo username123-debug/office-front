@@ -46,11 +46,11 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push('/overview')
+      this.$router.push('/schedule')
     },
     submit() {
       alert('保存しました（※ 実際には更新されません）')
-      this.$router.push('/overview')
+      this.$router.push('/schedule')
     }
   }
 }

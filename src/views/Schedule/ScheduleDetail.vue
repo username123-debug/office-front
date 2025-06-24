@@ -40,7 +40,7 @@ export default {
       return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
     },
     goBack() {
-      this.$router.push('/overview')
+      this.$router.push('/schedule')
     },
     goEdit() {
       this.$router.push(`/schedule/${this.schedule.id}/edit`)

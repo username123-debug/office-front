@@ -39,11 +39,11 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push('/overview')
+      this.$router.push('/schedule')
     },
     submit() {
       alert('登録しました（※ 実際には保存されません）')
-      this.$router.push('/overview')
+      this.$router.push('/schedule')
     }
   }
 }
