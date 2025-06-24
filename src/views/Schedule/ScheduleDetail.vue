@@ -1,6 +1,6 @@
 <template>
   <div class="detail-container" v-if="schedule">
-    <h2>📝 スケジュール詳細</h2>
+    <h2>スケジュール詳細</h2>
     <p><strong>タイトル：</strong>{{ schedule.title }}</p>
     <p><strong>時間：</strong>{{ formatTime(schedule.date_time_start) }} ～ {{ formatTime(schedule.date_time_end) }}</p>
     <p><strong>作成者：</strong>{{ schedule.created_by_name }}</p>
