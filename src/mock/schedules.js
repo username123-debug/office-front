@@ -176,4 +176,4 @@ export const mockSchedules = [
 { id: 121, title: "研修", date_time_start: "2025-06-27T11:00:00", date_time_end: "2025-06-27T12:00:00", created_by: "b" },
 { id: 122, title: "作業確認", date_time_start: "2025-06-27T10:00:00", date_time_end: "2025-06-27T11:00:00", created_by: "b" }
 
-]
+] 
