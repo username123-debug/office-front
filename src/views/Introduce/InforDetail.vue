@@ -212,11 +212,25 @@ const filteredEmployees = computed(() =>
 .left-column {
   width: 250px;
   text-align: center;
-  margin-right:110px;
+ margin-right: 100px;
+}
+.right-column {
+  padding-left: 170px;
+  flex: 1;
+  min-width: 400px;  /* ← ここで自動折り返しを防止 */
+  font-size: 16px;
+  color: #333;
+  margin-top: 40px;
+}
+
+.right-column {
+  width: 600px;
+  font-size: 16px;
+  color: #333;
 }
 .small-photo {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 12px;
@@ -227,43 +241,11 @@ const filteredEmployees = computed(() =>
   color: #1e3a8a;
   margin: 0;
 }
-.right-column {
-  /* padding-left: 20px; */
-  flex: 1;
-  min-width: 400px;  /* ← ここで自動折り返しを防止 */
-  font-size: 16px;
-  color: #333;
-}
-.info-item1,.info-item4 {
-  position: relative;
-  margin-left:10px;
-}
-.info-item2,.info-item3 {
-  position: relative;
-  margin-left:30px;
-}
-.curved-line-wrapper {
-  height: 500px;
-  margin: 0 20px;
-}
-.right-column {
-  width: 600px;
-  font-size: 16px;
-  color: #333;
-}
-.info-item1,
-.info-item4 {
-  margin-top: 20px;
-  margin-left: 10px;
-}
-.info-item2,
-.info-item3 {
-  margin-top: 20px;
-  margin-left: 30px;
-}
+
 .edit-button {
   margin-top: 40px;
   padding: 8px 16px;
+  margin-left: 170px;
 }
 .right-column p {
   margin-bottom: 32px;
