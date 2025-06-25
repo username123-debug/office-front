@@ -12,85 +12,92 @@
       <FullCalendar
         ref="calendarRef"
         :options="calendarOptions"
-        :events="events"
       />
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, onMounted, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { mockSchedules } from '../../mock/schedules'
 
-export default {
-  components: { FullCalendar },
-  data() {
-    return {
-      currentYear: '',
-      currentMonth: '',
-      events: [],
-      calendarOptions: {
-        dayCellDidMount: arg => {
-          const day = arg.date.getDay()
-          if (day === 0) {
-            arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-sunday-bg')
-          }
-          if (day === 6) {
-            arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-saturday-bg')
-          }
-        },
-        plugins: [dayGridPlugin],
-        initialView: 'dayGridMonth',
-        locale: 'ja',
-        headerToolbar: false,
-        height: 'auto',
-        expandRows: true,
-        datesSet: this.handleDateChange,
-        eventClick: info => {
-          this.$router.push(`/schedule/${info.event.id}`)
-        },
-        eventContent: arg => {
-          const d = new Date(arg.event.start)
-          const hh = String(d.getHours()).padStart(2, '0')
-          const mm = String(d.getMinutes()).padStart(2, '0')
-          return { html: `<div class='fc-custom-event'>${hh}:${mm}<br>${arg.event.title}</div>` }
-        }
-      }
-    }
-  },
-  mounted() {
-    const userId = this.$route.params.userId
-    const list = userId
-      ? mockSchedules.filter(s => s.created_by === userId)
-      : mockSchedules
-    this.events = list.map(item => ({
-      id: item.id.toString(),
-      title: item.title,
-      start: item.date_time_start,
-      end: item.date_time_end
-    }))
-    this.$nextTick(() => {
-      this.$refs.calendarRef.getApi().setOption('events', this.events)
-    })
-  },
-  methods: {
-    handleDateChange(arg) {
-      const d = arg.view.currentStart
-      this.currentYear = d.getFullYear()
-      this.currentMonth = d.getMonth() + 1
-    },
-    goPrev() {
-      this.$refs.calendarRef.getApi().prev()
-    },
-    goToday() {
-      this.$refs.calendarRef.getApi().today()
-    },
-    goNext() {
-      this.$refs.calendarRef.getApi().next()
-    }
-  }
+const route = useRoute()
+const router = useRouter()
+
+const calendarRef = ref(null)
+const currentYear = ref('')
+const currentMonth = ref('')
+const events = ref([])
+
+function handleDateChange(arg) {
+  const d = arg.view.currentStart
+  currentYear.value = d.getFullYear()
+  currentMonth.value = d.getMonth() + 1
 }
+
+function goPrev() {
+  calendarRef.value?.getApi().prev()
+}
+
+function goToday() {
+  calendarRef.value?.getApi().today()
+}
+
+function goNext() {
+  calendarRef.value?.getApi().next()
+}
+
+const calendarOptions = reactive({
+  plugins: [dayGridPlugin],
+  initialView: 'dayGridMonth',
+  locale: 'ja',
+  headerToolbar: false,
+  height: 'auto',
+  expandRows: true,
+  dayCellDidMount: arg => {
+    const day = arg.date.getDay()
+    if (day === 0) {
+      arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-sunday-bg')
+    }
+    if (day === 6) {
+      arg.el.querySelector('.fc-daygrid-day-frame')?.classList.add('fc-saturday-bg')
+    }
+  },
+  datesSet: handleDateChange,
+  eventClick: info => {
+    router.push(`/schedule/${info.event.id}`)
+  },
+  eventContent: arg => {
+    const d = new Date(arg.event.start)
+    const hh = String(d.getHours()).padStart(2, '0')
+    const mm = String(d.getMinutes()).padStart(2, '0')
+    return {
+      html: `<div class='fc-custom-event'>${hh}:${mm}<br>${arg.event.title}</div>`
+    }
+  },
+  events: []
+})
+
+onMounted(() => {
+  const userId = route.params.userId
+  const list = userId
+    ? mockSchedules.filter(s => s.created_by === userId)
+    : mockSchedules
+
+  events.value = list.map(item => ({
+    id: item.id.toString(),
+    title: item.title,
+    start: item.date_time_start,
+    end: item.date_time_end
+  }))
+
+  nextTick(() => {
+    calendarRef.value?.getApi().setOption('events', events.value)
+  })
+})
 </script>
 
 <style>

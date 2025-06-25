@@ -26,128 +26,139 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { mockSchedules } from '../../mock/schedules'
 
-export default {
-  name: 'ScheduleOverview',
-  components: { FullCalendar },
-  data() {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    return {
-      keyword: this.$route.query.keyword || '',
-      currentWeekStart: today,
-      employees: [
-        { id: 'self', name: '自分' },
-        { id: 'a', name: 'A' },
-        { id: 'b', name: 'B' }
-      ],
-      calendarOptionsMap: {},
-      weekTitle: ''
-    }
-  },
-  computed: {
-    filteredEmployees() {
-      return this.employees.filter(e => !this.keyword || e.name.includes(this.keyword))
-    }
-  },
-  watch: {
-    currentWeekStart: {
-      immediate: true,
-      handler() {
-        this.updateAllCalendars()
-        this.weekTitle = this.formatWeekRange(this.currentWeekStart)
-      }
-    }
-  },
-  methods: {
-    updateAllCalendars() {
-      const newMap = {}
-      this.employees.forEach(emp => {
-        newMap[emp.id] = this.getCalendarOptions(emp.id)
-      })
-      this.calendarOptionsMap = newMap
+const router = useRouter()
+const route = useRoute()
+
+const keyword = ref(route.query.keyword || '')
+
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+const currentWeekStart = ref(today)
+
+const weekTitle = ref('')
+const employees = ref([])
+const calendarOptionsMap = ref({})
+
+const getData = async () => {
+  const response = await axios.get('http://localhost:8080/users/abstract')
+  employees.value = Object.entries(response.data).map(([id, name]) => ({
+    id,
+    name
+  }))
+  updateAllCalendars()
+}
+
+onMounted(() => {
+  getData()
+})
+
+const filteredEmployees = computed(() =>
+  employees.value.filter(e => !keyword.value || e.name.includes(keyword.value))
+)
+
+watch(currentWeekStart, () => {
+  updateAllCalendars()
+  weekTitle.value = formatWeekRange(currentWeekStart.value)
+}, { immediate: true })
+
+function updateAllCalendars() {
+  const newMap = {}
+  employees.value.forEach(emp => {
+    newMap[emp.id] = getCalendarOptions(emp.id)
+  })
+  calendarOptionsMap.value = newMap
+}
+
+function getEventsFor(userId) {
+  const start = new Date(currentWeekStart.value)
+  const end = new Date(start)
+  end.setDate(start.getDate() + 7)
+  return mockSchedules
+    .filter(s => {
+      const d = new Date(s.date_time_start)
+      return s.created_by === userId && d >= start && d < end
+    })
+    .map(s => ({
+      id: s.id.toString(),
+      title: s.title,
+      start: s.date_time_start,
+      end: s.date_time_end
+    }))
+}
+
+function getCalendarOptions(userId) {
+  return {
+    plugins: [dayGridPlugin],
+    initialView: 'dayGridWeek',
+    locale: 'ja',
+    headerToolbar: false,
+    height: 'auto',
+    contentHeight: 300,
+    expandRows: true,
+    aspectRatio: 2.5,
+    initialDate: currentWeekStart.value,
+    firstDay: currentWeekStart.value.getDay(),
+    events: getEventsFor(userId),
+    dayCellDidMount: arg => {
+      const day = arg.date.getDay()
+      if (day === 0) arg.el.classList.add('fc-sunday-bg')
+      if (day === 6) arg.el.classList.add('fc-saturday-bg')
     },
-    getEventsFor(userId) {
-      const start = new Date(this.currentWeekStart)
-      const end = new Date(start)
-      end.setDate(start.getDate() + 7)
-      return mockSchedules
-        .filter(s => {
-          const d = new Date(s.date_time_start)
-          return s.created_by === userId && d >= start && d < end
-        })
-        .map(s => ({
-          id: s.id.toString(),
-          title: s.title,
-          start: s.date_time_start,
-          end: s.date_time_end
-        }))
+    eventClick: info => {
+      router.push(`/schedule/${info.event.id}`)
     },
-    getCalendarOptions(userId) {
+    eventContent: arg => {
+      const d = new Date(arg.event.start)
+      const hh = String(d.getHours()).padStart(2, '0')
+      const mm = String(d.getMinutes()).padStart(2, '0')
       return {
-        plugins: [dayGridPlugin],
-        initialView: 'dayGridWeek',
-        locale: 'ja',
-        headerToolbar: false,
-        height: 'auto',
-        contentHeight: 300,
-        expandRows: true,
-        aspectRatio: 2.5,
-        initialDate: this.currentWeekStart,
-        firstDay: this.currentWeekStart.getDay(),
-        events: this.getEventsFor(userId),
-        dayCellDidMount: arg => {
-          const day = arg.date.getDay()
-          if (day === 0) arg.el.classList.add('fc-sunday-bg')
-          if (day === 6) arg.el.classList.add('fc-saturday-bg')
-        },
-        eventClick: info => {
-          this.$router.push(`/schedule/${info.event.id}`)
-        },
-        eventContent: arg => {
-          const d = new Date(arg.event.start)
-          const hh = String(d.getHours()).padStart(2, '0')
-          const mm = String(d.getMinutes()).padStart(2, '0')
-          return {
-            html: `<div style='font-size:0.85rem'>${hh}:${mm}<br/>${arg.event.title}</div>`
-          }
-        }
+        html: `<div style='font-size:0.85rem'>${hh}:${mm}<br/>${arg.event.title}</div>`
       }
-    },
-    changeWeek(deltaDays) {
-      const t = new Date(this.currentWeekStart)
-      if (deltaDays === -7) {
-        const day = t.getDay()
-        t.setDate(t.getDate() - (day === 0 ? 7 : day))
-      } else if (deltaDays === 7) {
-        const day = t.getDay()
-        t.setDate(t.getDate() + (day === 0 ? 7 : 7 - day))
-      } else {
-        t.setDate(t.getDate() + deltaDays)
-      }
-      this.currentWeekStart = t
-    },
-    goThisWeek() {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      this.currentWeekStart = today
-    },
-    formatWeekRange(date) {
-      const s = new Date(date)
-      const e = new Date(s)
-      e.setDate(s.getDate() + 6)
-      return `${s.getFullYear()}/${s.getMonth() + 1}/${s.getDate()} - ${e.getMonth() + 1}/${e.getDate()}`
-    },
-    goToCalendar(userId) {
-      this.$router.push(`/calendar/${userId}`)
     }
   }
 }
+
+function changeWeek(deltaDays) {
+  const t = new Date(currentWeekStart.value)
+  if (deltaDays === -7) {
+    const day = t.getDay()
+    t.setDate(t.getDate() - (day === 0 ? 7 : day))
+  } else if (deltaDays === 7) {
+    const day = t.getDay()
+    t.setDate(t.getDate() + (day === 0 ? 7 : 7 - day))
+  } else {
+    t.setDate(t.getDate() + deltaDays)
+  }
+  currentWeekStart.value = t
+}
+
+function goThisWeek() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  currentWeekStart.value = today
+}
+
+function formatWeekRange(date) {
+  const s = new Date(date)
+  const e = new Date(s)
+  e.setDate(s.getDate() + 6)
+  return `${s.getFullYear()}/${s.getMonth() + 1}/${s.getDate()} - ${e.getMonth() + 1}/${e.getDate()}`
+}
+
+function goToCalendar(userId) {
+  router.push(`/calendar/${userId}`)
+}
 </script>
+
+
 
 <style>
 .overview-container {

@@ -16,40 +16,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { mockSchedules } from '../../mock/schedules'
 
-export default {
-  data() {
-    return {
-      schedule: null
-    }
-  },
-  mounted() {
-    const id = this.$route.params.id
-    this.schedule = mockSchedules.find(item => item.id.toString() === id)
-  },
-  methods: {
-    formatTime(datetimeStr) {
-      const date = new Date(datetimeStr)
-      const yyyy = date.getFullYear()
-      const mm = String(date.getMonth() + 1).padStart(2, '0')
-      const dd = String(date.getDate()).padStart(2, '0')
-      const hh = String(date.getHours()).padStart(2, '0')
-      const mi = String(date.getMinutes()).padStart(2, '0')
-      return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
-    },
-    goBack() {
-      this.$router.push('/schedule')
-    },
-    goEdit() {
-      this.$router.push(`/schedule/${this.schedule.id}/edit`)
-    },
-    confirmDelete() {
-      if (confirm('本当に削除しますか？')) {
-        this.$router.push('/overview')
-      }
-    }
+const route = useRoute()
+const router = useRouter()
+
+const schedule = ref(null)
+
+onMounted(() => {
+  const id = route.params.id
+  schedule.value = mockSchedules.find(item => item.id.toString() === id)
+})
+
+function formatTime(datetimeStr) {
+  const date = new Date(datetimeStr)
+  const yyyy = date.getFullYear()
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+  const hh = String(date.getHours()).padStart(2, '0')
+  const mi = String(date.getMinutes()).padStart(2, '0')
+  return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
+}
+
+function goBack() {
+  router.push('/schedule')
+}
+
+function goEdit() {
+  router.push(`/schedule/${schedule.value.id}/edit`)
+}
+
+function confirmDelete() {
+  if (confirm('本当に削除しますか？')) {
+    router.push('/overview')
   }
 }
 </script>
