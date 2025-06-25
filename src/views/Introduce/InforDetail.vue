@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, computed, } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import photo001 from '@/assets/sky.jpg'
 import photo002 from '@/assets/summer.jpg'
 import photo003 from '@/assets/sun.jpg'
@@ -46,15 +46,15 @@ const employees = ref(employeeData)
 //   bio: 'データが見つかりません。'
 // }
 
-const query = route.query
-employee = {
-  ...employee,
-  name: query.name || employee.name,
-  joinDate: query.joinDate || employee.joinDate,
-  myDepartment: query.myDepartment || employee.myDepartment,
-  hobby: query.hobby || employee.hobby,
-  bio: query.bio || employee.bio
-}
+// const query = route.query
+// employee = {
+//   ...employee,
+//   name: query.name || employee.name,
+//   joinDate: query.joinDate || employee.joinDate,
+//   myDepartment: query.myDepartment || employee.myDepartment,
+//   hobby: query.hobby || employee.hobby,
+//   bio: query.bio || employee.bio
+// }
 
 const goToEdit = () => {
   router.push({
@@ -190,7 +190,7 @@ onMounted(getData);
 
   <div class="right-column">
     <transition name="fade" appear>
-      <p><strong>◆入社年月：</strong> {{ employee.joinDate }}</p>
+      <p><strong>◆入社年月：</strong> {{ employee.joinedAt }}</p>
     </transition>
     <transition name="fade" appear>
       <p><strong>◆部署：</strong> {{ employee.myDepartment }}</p>

@@ -81,8 +81,8 @@ onMounted(getData);
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="selectedDepartment = '生産部門'">生産部門</a>
-          <ul v-if="selectedDepartment === '生産部門'" class="name-list">
+          <a href="javascript:void(0)" @click="selectedDepartment = '生産部'">生産部門</a>
+          <ul v-if="selectedDepartment === '生産部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
               <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
             </li>
@@ -90,8 +90,8 @@ onMounted(getData);
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部門'">IT部門</a>
-          <ul v-if="selectedDepartment === 'IT部門'" class="name-list">
+          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部'">IT部門</a>
+          <ul v-if="selectedDepartment === 'IT部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
               <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
             </li>
