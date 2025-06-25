@@ -22,15 +22,13 @@ const employees = ref([]);
 
 //"/api/users/abstract"からidとnameだけを取得
 const getData = async () => {
-  const response = await api.get("/users/abstract");
+  const response = await api.get("/users/abstract/department");
   console.log("response: ",response);
   console.log("response.data: ",response.data);
 
-  // idとnameだけの配列に整形
-  employees.value = Object.entries(response.data).map(([id, name]) => ({
-    id,
-    name
-  }));
+  employees.value = response.data;
+
+  console.log("employees.value: ", employees.value);
 };
 
 const showSubMenu = ref(false)

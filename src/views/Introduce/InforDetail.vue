@@ -37,13 +37,14 @@ const employeeData = [
   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
 ]
 const employees = ref(employeeData)
-let employee = employees.value.find(emp => emp.id === id) || {
-  name: '不明',
-  joinDate: '',
-  myDepartment: '不明',
-  hobby: '',
-  bio: 'データが見つかりません。'
-}
+
+// let employee = employees.value.find(emp => emp.id === id) || {
+//   name: '不明',
+//   joinDate: '',
+//   myDepartment: '不明',
+//   hobby: '',
+//   bio: 'データが見つかりません。'
+// }
 
 const query = route.query
 employee = {
@@ -80,6 +81,32 @@ const filteredEmployees = computed(() =>
     ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
     : employees.value
 )
+
+
+const employee = ref([]);
+
+const getData = async () => {
+  const response = await api.get("/info/"+id);
+  console.log("response: ",response);
+  console.log("response.data: ",response.data);
+  console.log("response.data.id: ",response.data.id);
+  employee.value = response.data;
+  console.log("employee.value: ", employee.value);
+  console.log("employee.value.name: ", employee.value.name);
+  console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
+};
+
+const editJoinedAt = (string) => {
+  if(!string){
+    return '';//joinedAtを取ってこれない場合の処理.
+  }
+  const [year, month] = string.split('T')[0].split('-');// const[year, month] = ['2025', '06', '24'];
+  return `${year}年${parseInt(month)}日`;
+};
+
+
+onMounted(getData);
+
 </script>
 
 <template>

@@ -48,6 +48,31 @@ const handleSubmit = () => {
     }
   })
 }
+
+
+
+const employee = ref([]);
+
+const getData = async () => {
+  const response = await api.get("/info/" + id);
+  console.log("response.data: ", response.data);
+  employee.value=response.data;
+};
+
+const saveData = async () => {
+  const res = await api.put("/info/test/" + id,{
+    name: employee.value.name,
+    hobby: employee.value.hobby,
+    bio: employee.value.bio,
+    myDepartment: [{
+      id: employee.value.myDepartment?.[0]?.id,
+      name: employee.value.myDepartment?.[0]?.name,
+    }]
+  });
+  console.log("res: ", res);
+};
+
+onMounted(getData);
 </script>
 
 
