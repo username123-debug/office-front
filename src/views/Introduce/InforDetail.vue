@@ -206,6 +206,17 @@ onMounted(getData);
       <button class="edit-button" @click="goToEdit">▶ 編集</button>
     </transition>
   </div>
+
+<!-- <div class="right-column">
+        <p class="info-item1" style="margin-top: 100px;"><strong>◆入社年月：</strong> {{ editJoinedAt(employee.joinedAt) }}</p>
+        <p class="info-item2" style="margin-top: 60px;" v-if="employee.myDepartment && employee.myDepartment.length > 0"><strong>◆部署：</strong> {{ employee.myDepartment[0].name }}</p>
+        <p class="info-item3" style="margin-top: 60px;"><strong>◆趣味：</strong> {{ employee.hobby }}</p>
+        <p class="info-item4" style="margin-top: 60px;"><strong>◆メッセージ：</strong><br /> {{ employee.bio }}</p>
+        <p>
+       <button @click="goToEdit">▶ 編集</button>
+      </p>
+      </div> -->
+
 </div>
 
       <RouterView/>
