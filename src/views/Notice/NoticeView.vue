@@ -14,6 +14,7 @@
   const notices = ref([]);
 
   //一覧表示
+  //2件目（最新の情報）が1件目の下に来てしまうことの修正必要
   const getNotices = async () => {
     try {
       const res = await api.get('/notices');
@@ -30,10 +31,14 @@
   // const currentPage = ref(1)
   // const perPage = 5
 
-//削除機能
+  //削除機能
   const deleteNotices = async (id) => {
+    if(!window.confirm("本当に削除しますか？")){
+      return;
+    }
+
     try {
-      const res = await api.delete('/notices/${id}');
+      const res = await api.delete(`/notices/` + id);
       await getNotices();
       console.log(res.data);
     } catch (error) {
@@ -41,40 +46,16 @@
     }
   };
 
-  //公開日時
+  //公開日時 (表示が1月1日00:00のような形式になるよう修正)
   const formatDate = (isoString) => {
-  if (!isoString) return '';
-  const date = new Date(isoString);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hour = date.getHours();
-  const minute = date.getMinutes().toString().padStart(2, '0');
-  return `${month}月${day}日${hour}:${minute}`;
-}
-  // 検索機能
-  // const keyword = ref('');
-  // const searchNotices = computed(() => {
-  //   if(!keyword.value) return notices.value;
-  //   return notices.value.filter(notice =>
-  //     notice.title.toLowerCase().includes(keyword.value.toLowerCase())
-  //   );
-  // });
-
-  //並び替え機能
-  //const sortOrder = ref('asc');
-
-  // const sortedNotices = computed(() => {
-  //   const copied = Array.from(notices.value);
-  //   return copied.sort((a, b) => {
-  //     const dateA = new Date(a.createdAt);
-  //     const dateB = new Date(b.createdAt);
-  //     if(sortOrder.value === 'asc'){
-  //       return dateA - dateB;
-  //     }else {
-  //       return dateB - dateA;
-  //     }
-  //   });
-  // });
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    return `${month}月${day}日${hour}:${minute}`;
+  }
 
   //   ページネーション  
   // const paginatedNotices = computed(() => {
@@ -136,7 +117,7 @@
           </tbody>
         </table>
         <div class="add">
-          <label><button @click="router.push('/addnotice')">お知らせを追加する</button></label>
+          <label><button @click="router.push('/addnotice')">追加する</button></label>
         </div>
         <!-- <div class="pagination">
           <button @click="prevPage" :disabled="currentPage === 1">前へ</button>
@@ -148,15 +129,18 @@
   </div>
 </template>
 
-<style>
-  .container2 {
-    border: 2px solid black;
+<style scoped>
+  .container {
     width: 100%;
-    height: 550px;
+    clear: both;
+  }
+
+  .container2 {
+    width: 100%;
+    margin: 0 auto;
   }
 
   .main {
-    border: 2px solid black;
     padding: 2px;
     margin: 8px;
     height: 500px;
