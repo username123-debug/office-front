@@ -8,10 +8,10 @@ const router = useRouter()
 const employee = ref({
   id: Date.now().toString(),
   name: '',
-  joinDate: '',
-  department: '',
+  joinedAt: '',
+  myDepartment: '',
   hobby: '',
-  message: '',
+  bio: '',
   photo: samplePhoto
 })
 
@@ -35,12 +35,12 @@ const submitForm = () => {
 
         <div class="form-group">
           <label>入社年月</label>
-         <input v-model="joinDate" type="month" required />
+         <input v-model="joinedAt" type="month" required />
         </div>
 
         <div class="form-group">
           <label>部署</label>
-          <select v-model="employee.department" required>
+          <select v-model="employee.myDepartment" required>
             <option>営業部</option>
             <option>人事部</option>
             <option>財務部</option>
@@ -56,7 +56,7 @@ const submitForm = () => {
 
         <div class="form-group">
           <label>メッセージ</label>
-          <textarea v-model="employee.message"></textarea>
+          <textarea v-model="employee.bio"></textarea>
         </div>
 
         <div class="form-group center">

@@ -10,7 +10,7 @@ import photo006 from '@/assets/cloud.png'
 import backgroundImg from '@/assets/anh nen.jpg'
 
 const backgroundStyle = {
-  backgroundImage: `url(${backgroundImg})`,
+  backgroundImage: `linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url(${backgroundImg})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
@@ -18,18 +18,12 @@ const backgroundStyle = {
   width: '100vw',
 }
 
-const selectedEmployee = ref(null)
-
-const selectEmployee = (employee) => {
-  selectedEmployee.value = employee
-}
-
 const route = useRoute()
 const router = useRouter()
 const id = route.params.id
 
 const employeeData = [
-  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', photo: photo001 },
+  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。', photo: photo001 },
   { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
   { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
   { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
@@ -37,14 +31,13 @@ const employeeData = [
   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
 ]
 const employees = ref(employeeData)
-
-// let employee = employees.value.find(emp => emp.id === id) || {
-//   name: '不明',
-//   joinDate: '',
-//   myDepartment: '不明',
-//   hobby: '',
-//   bio: 'データが見つかりません。'
-// }
+let employee = employees.value.find(emp => emp.id === id) || {
+  name: '不明',
+  joinDate: '',
+  myDepartment: '不明',
+  hobby: '',
+  bio: 'データが見つかりません。'
+}
 
 const query = route.query
 employee = {
@@ -81,32 +74,6 @@ const filteredEmployees = computed(() =>
     ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
     : employees.value
 )
-
-
-const employee = ref([]);
-
-const getData = async () => {
-  const response = await api.get("/info/"+id);
-  console.log("response: ",response);
-  console.log("response.data: ",response.data);
-  console.log("response.data.id: ",response.data.id);
-  employee.value = response.data;
-  console.log("employee.value: ", employee.value);
-  console.log("employee.value.name: ", employee.value.name);
-  console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
-};
-
-const editJoinedAt = (string) => {
-  if(!string){
-    return '';//joinedAtを取ってこれない場合の処理.
-  }
-  const [year, month] = string.split('T')[0].split('-');// const[year, month] = ['2025', '06', '24'];
-  return `${year}年${parseInt(month)}日`;
-};
-
-
-onMounted(getData);
-
 </script>
 
 <template>
@@ -126,7 +93,7 @@ onMounted(getData);
           <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>
           <ul v-if="selectedDepartment === '営業部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
-               <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
             </li>
           </ul>
         </li>
@@ -179,35 +146,19 @@ onMounted(getData);
 
     <main class="content">
       <div class="detail-wrapper">
-  <div class="left-column">
-    <transition name="fade" appear>
-      <img :src="employee.photo" alt="写真" class="small-photo" />
-    </transition>
-    <transition name="fade" appear>
-      <h1>{{ employee.name }}</h1>
-    </transition>
-  </div>
-
-  <div class="right-column">
-    <transition name="fade" appear>
-      <p><strong>◆入社年月：</strong> {{ employee.joinDate }}</p>
-    </transition>
-    <transition name="fade" appear>
-      <p><strong>◆部署：</strong> {{ employee.myDepartment }}</p>
-    </transition>
-    <transition name="fade" appear>
-      <p><strong>◆趣味：</strong> {{ employee.hobby }}</p>
-    </transition>
-    <transition name="fade" appear>
-      <p><strong>◆メッセージ：</strong><br />{{ employee.bio }}</p>
-    </transition>
-
-    <transition name="fade" appear>
-      <button class="edit-button" @click="goToEdit">▶ 編集</button>
-    </transition>
-  </div>
-</div>
-
+        <div class="right-column">
+          <p class="info-item1"><strong>◆入社年月：</strong>{{ employee.joinedAt }}</p>
+          <p class="info-item2"><strong>◆部署：</strong>{{ employee.myDepartment }}</p>
+          <p class="info-item3"><strong>◆趣味：</strong>{{ employee.hobby }}</p>
+          <p class="info-item4"><strong>◆メッセージ：</strong><br />{{ employee.bio }}</p>
+          <button class="edit-button" @click="goToEdit">▶ 編集</button>
+        </div>
+        <div class="left-column">
+          <img :src="employee.photo" alt="写真" class="small-photo" />
+          <h1>{{ employee.name }}</h1>
+        </div>
+        
+      </div>
       <RouterView/>
     </main>
   </div>
@@ -217,23 +168,21 @@ onMounted(getData);
 <style scoped>
 .container {
   display: flex;
-  height: auto; /* ← ここを変更 */
-  min-height: 100vh; /* 最低限画面全体の高さは確保 */
+  height: 100vh;
   font-family: sans-serif;
 }
 .sidebar {
   width: 250px;
-  /* background-color: #129350; */
+  background-color: #129350;
   color: white;
   padding: 20px;
   overflow-y: auto;
 }
 .sidebar h2 {
-  font-size: 26px;
+  font-size: 20px;
   margin-bottom: 16px;
   border-bottom: 1px solid #666;
   padding-bottom: 8px;
-  font-weight: bold;
 }
 .menu {
   list-style: none;
@@ -246,8 +195,6 @@ onMounted(getData);
   color: white;
   text-decoration: none;
   transition: color 0.2s;
-  font-size: 20px;
-  
 }
 .menu a:hover {
   color: #757575;
@@ -255,37 +202,32 @@ onMounted(getData);
 .content {
   flex: 1;
   position: relative;
-  overflow-y: auto; /* ← スクロール可能に */
-  max-height: 100vh;
 }
 .detail-wrapper {
   display: flex;
+  gap: 24px;
   align-items: flex-start;
   padding: 60px 40px;
-  gap: 40px; /* ← 適度な間隔 */
 }
-
 .left-column {
   width: 250px;
   text-align: center;
-  padding-right: 20px;
-  /* border-right: 2px solid #ccc; ← ここで縦線を追加 */
+ margin-right: 100px;
+}
+.right-column {
+  padding-left: 170px;
+  flex: 1;
+  min-width: 400px;  /* ← ここで自動折り返しを防止 */
+  font-size: 16px;
+  color: #333;
+  margin-top: 40px;
 }
 
 .right-column {
-  padding-left: 40px;
-  flex: 1;
+  width: 600px;
   font-size: 16px;
   color: #333;
-  word-wrap: break-word;        /* 単語が長くても折り返す */
-  overflow-wrap: break-word;    /* こちらも併用しておくと安心 */
-  white-space: normal;          /* テキストは自動的に折り返す */
-   max-width: 500px;        /* ← この幅で折り返す */
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
 }
-
 .small-photo {
   width: 200px;
   height: 200px;
@@ -308,30 +250,6 @@ onMounted(getData);
 .right-column p {
   margin-bottom: 32px;
   line-height: 2; 
-  font-size: 16px;
-  word-break: break-word; /* ← こちらでも強制的に折り返す */
+  font-size: 20px;
 }
-.fade-enter-active {
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
-}
-.fade-enter-to {
-  opacity: 1;
-  transform: translateY(0);
-}
-.left-column h1 {
-  font-weight: bold;    /* 太字にする */
-  font-size: 26px;      /* 少し大きくする（お好みで調整） */
-  color: #000309;       /* 現在の文字色をキープ（任意） */
-  margin-top: 10px;     /* 写真との間に少し余白（任意） */
-}
-.right-column strong {
-  font-weight: 600;
-  font-size: 20px; /* ← 必要なら文字サイズも */
-}
-
-
 </style>
