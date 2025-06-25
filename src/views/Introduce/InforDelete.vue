@@ -3,7 +3,7 @@
     <h2>社員情報削除</h2>
     <ul class="employee-list">
       <li v-for="employee in employees" :key="employee.id" class="employee-item">
-        <span>{{ employee.name }}（{{ employee.department }}）</span>
+        <span>{{ employee.name }}（{{ employee.myDepartment }}）</span>
         <button @click="deleteEmployee(employee.id)">削除</button>
       </li>
     </ul>
@@ -21,12 +21,12 @@ import photo006 from '@/assets/cloud.png'
 
 // 初期データ
 const initialEmployees = [
-  { id: '001', name: '田中 太郎', department: '営業部', photo: photo001 },
-  { id: '002', name: '山田 花子', department: '人事部', photo: photo002 },
-  { id: '003', name: '佐藤 一郎', department: 'IT部門', photo: photo003 },
-  { id: '004', name: '鈴木 次郎', department: '財務部', photo: photo004 },
-  { id: '005', name: '伊藤 三郎', department: '生産部門', photo: photo005 },
-  { id: '006', name: '高橋 四郎', department: '営業部', photo: photo006 }
+  { id: '001', name: '田中 太郎', myDepartment: '営業部', photo: photo001 },
+  { id: '002', name: '山田 花子', myDepartment: '人事部', photo: photo002 },
+  { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', photo: photo003 },
+  { id: '004', name: '鈴木 次郎', myDepartment: '財務部', photo: photo004 },
+  { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', photo: photo005 },
+  { id: '006', name: '高橋 四郎', myDepartment: '営業部', photo: photo006 }
 ]
 
 // 社員一覧（初期データ＋追加データ）
