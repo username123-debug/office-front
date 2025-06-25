@@ -28,31 +28,31 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { mockSchedules } from '../../mock/schedules'
 
-export default {
-  data() {
-    return {
-      form: null
-    }
-  },
-  mounted() {
-    const id = this.$route.params.id
-    const found = mockSchedules.find(item => item.id.toString() === id)
-    if (found) {
-      this.form = { ...found }
-    }
-  },
-  methods: {
-    goBack() {
-      this.$router.push('/overview')
-    },
-    submit() {
-      alert('保存しました（※ 実際には更新されません）')
-      this.$router.push('/overview')
-    }
+const route = useRoute()
+const router = useRouter()
+
+const form = ref(null)
+
+onMounted(() => {
+  const id = route.params.id
+  const found = mockSchedules.find(item => item.id.toString() === id)
+  if (found) {
+    form.value = { ...found }
   }
+})
+
+function goBack() {
+  router.push('/schedule')
+}
+
+function submit() {
+  alert('保存しました（※ 実際には更新されません）')
+  router.push('/schedule')
 }
 </script>
 

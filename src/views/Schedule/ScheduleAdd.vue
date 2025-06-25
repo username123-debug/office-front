@@ -24,30 +24,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      form: {
-        title: '',
-        date_time_start: '',
-        date_time_end: '',
-        body: '',
-        created_by_name: ''
-      }
-    }
-  },
-  methods: {
-    goBack() {
-      this.$router.push('/overview')
-    },
-    submit() {
-      alert('登録しました（※ 実際には保存されません）')
-      this.$router.push('/overview')
-    }
-  }
+<script setup>
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const form = reactive({
+  title: '',
+  date_time_start: '',
+  date_time_end: '',
+  body: '',
+  created_by_name: ''
+})
+
+function goBack() {
+  router.push('/schedule')
+}
+
+function submit() {
+  alert('登録しました（※ 実際には保存されません）')
+  router.push('/schedule')
 }
 </script>
+
 
 <style scoped>
 .add-container {

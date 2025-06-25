@@ -26,7 +26,7 @@
               <li v-if="todaySchedules.length === 0">予定はありません。</li>
             </ul>
             <div class="more-link-wrapper">
-              <router-link to="/overview" class="more-link">もっと見る</router-link>
+              <router-link to="/Schedule" class="more-link">もっと見る</router-link>
             </div>
           </section>
 
@@ -50,11 +50,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect, onMounted } from 'vue'
+import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { mockSchedules } from '@/mock/schedules'
-import { mockNotices } from '@/mock/notices'
 
 const currentFirstDay = ref(getTodayStart())
 const calendarOptions = ref({})
@@ -153,8 +153,19 @@ const todaySchedules = computed(() =>
     })
 )
 
+const notices = ref([])
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://localhost:8080/notices')
+    notices.value = res.data
+  } catch (error) {
+    console.error('お知らせ取得失敗:', error)
+  }
+})
+
 const newestNotices = computed(() =>
-  mockNotices
+  notices.value
     .slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3)
@@ -162,6 +173,7 @@ const newestNotices = computed(() =>
 
 const formatDate = iso => new Date(iso).toLocaleDateString()
 </script>
+
 
 <style scoped>
 .container {
@@ -221,6 +233,10 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 .today-schedule,
 .notice-section {
   flex: 1;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
 }
 
 .today-schedule h2,
@@ -241,8 +257,14 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 
 .today-schedule li,
 .notice-section li {
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  margin: 12px 0;
+}
+
+.today-schedule ul li a,
+.notice-section ul li a {
+  color: #000;
+  font-size: 1rem;
+  text-decoration: underline;
 }
 
 .date {
@@ -251,21 +273,19 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   font-size: 0.85rem;
 }
 
-.notice-section a,
+.more-link-wrapper {
+  margin-top: 8px;
+  text-align: left;
+}
+
 .more-link {
   color: #3c82f6;
   font-size: 0.9rem;
   text-decoration: none;
 }
 
-.notice-section a:hover,
 .more-link:hover {
   text-decoration: underline;
-}
-
-.more-link-wrapper {
-  margin-top: 4px;
-  text-align: left;
 }
 
 .fc-sunday-bg {
