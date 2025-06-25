@@ -7,7 +7,7 @@ import photo004 from '@/assets/sunflower.jpg'
 import photo005 from '@/assets/sunflower2.jpg'
 import photo006 from '@/assets/cloud.png'
 import api from '@/plugin/axios.js';
-import {ref, onMounted} from 'vue';
+import {ref, onMounted,computed} from 'vue';
 
 // 初期データ
 const initialEmployees = [
@@ -47,68 +47,106 @@ const filteredEmployees = computed(() =>
 )
 onMounted(getData);
 </script>
-
 <template>
   <div class="container">
     <aside class="sidebar">
       <h2>社員紹介</h2>
       <ul class="menu">
-        
         <li><a href="#">ホーム</a></li>
         <li><a href="#">新入社員</a></li>
-        <li><a href="#">営業部門</a></li>
-        <li><a href="#">人事部門</a></li>
-        <li><a href="#">財務部門</a></li>
-        <li><a href="#">生産部門</a></li>
-        <li><a href="#">IT部門</a></li>
-       
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>
+          <ul v-if="selectedDepartment === '営業部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '人事部'">人事部門</a>
+          <ul v-if="selectedDepartment === '人事部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '財務部'">財務部門</a>
+          <ul v-if="selectedDepartment === '財務部'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = '生産部門'">生産部門</a>
+          <ul v-if="selectedDepartment === '生産部門'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部門'">IT部門</a>
+          <ul v-if="selectedDepartment === 'IT部門'" class="name-list">
+            <li v-for="e in filteredEmployees" :key="e.id">
+              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)" @click="toggleSubMenu">そのほか</a>
+          <ul v-if="showSubMenu" class="submenu">
+            <li><router-link to="/introduce/add">社員紹介追加</router-link></li>
+            <li><router-link to="/introduce/delete">社員情報削除</router-link></li>
+          </ul>
+        </li>
       </ul>
     </aside>
 
     <main class="content">
-    <div class="section">
-      <h2>このサイトについて</h2>
-      <p>
-        このサイトは社員の自己紹介ページです。
-        
-      </p>
-    </div>
+      <div class="section">
+        <h2>このサイトについて</h2>
+        <p>このサイトは社員の自己紹介ページです。</p>
+      </div>
 
-    <div class="section">
-      <h2>更新履歴</h2>
-      <ul>
-        <li>2025.6.19 自己紹介サイト 作成しました</li>
-      </ul>
-    </div>
+      <div class="section">
+        <h2>更新履歴</h2>
+        <ul>
+          <li>2025.6.19 自己紹介サイト 作成しました</li>
+        </ul>
+      </div>
 
-    <div class="section">
-      <h2>新入社員</h2>
-    </div>
-        <div class="employee-grid">
-      <div
-        class="employee-card"
-        v-for="employee in employees"
-        :key="employee.id"
-      >
-        <img :src="employee.photo" alt="写真" class="employee-photo" />
+      <div class="section">
+        <h2>新入社員</h2>
+      </div>
 
-        <!-- 区切り線 -->
-      <hr class="separator" />
-      <!-- 区切り線 -->
-      <hr class="separator" />
-        <RouterLink :to="`/introduce/detail/${employee.id}`" class="employee-name">
-          {{ employee.name }}
-      </RouterLink>
-      <!-- 区切り線 -->
-      <hr class="separator" />
-  
-  </div>
-</div>
+      <div class="employee-grid">
+        <div
+          class="employee-card"
+          v-for="employee in employees"
+          :key="employee.id"
+        >
+          <img :src="employee.photo" alt="写真" class="employee-photo" />
+          <hr class="separator" />
+          <RouterLink :to="`/introduce/detail/${employee.id}`" class="employee-name">
+            {{ employee.name }}
+          </RouterLink>
+          <hr class="separator" />
+        </div>
+      </div>
+    </main>
 
-  </main>
-      <RouterView />
+    <RouterView />
   </div>
 </template>
+
 
 <style scoped>
 .container {
