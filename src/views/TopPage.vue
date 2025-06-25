@@ -10,8 +10,10 @@
               <button class="nav-button double-right" @click="goNextSunday">翌週 ≫</button>
             </div>
             <div class="week-title">{{ weekTitle }}</div>
-          </div>
-          <FullCalendar :key="currentFirstDay.getTime()" :options="calendarOptions" />
+          <div class="calendar-box">
+  <FullCalendar :key="currentFirstDay.getTime()" :options="calendarOptions" />
+</div>
+</div>
         </section>
 
         <div class="bottom">
@@ -188,7 +190,14 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   width: 1150px;
   padding: 20px;
   box-sizing: border-box;
+
+  background-image: url('@/assets/schedule/top-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
 }
+
 
 .week-schedule {
   margin-bottom: 32px;
@@ -305,5 +314,11 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 .fc-scrollgrid-sync-table {
   table-layout: fixed !important;
   width: 100% !important;
+}
+.calendar-box {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 </style>

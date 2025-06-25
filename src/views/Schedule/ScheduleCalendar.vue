@@ -20,9 +20,9 @@
 <script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { mockSchedules } from '../../mock/schedules'
 
 const route = useRoute()
 const router = useRouter()
@@ -81,24 +81,36 @@ const calendarOptions = reactive({
   events: []
 })
 
-onMounted(() => {
+onMounted(async () => {
   const userId = route.params.userId
-  const list = userId
-    ? mockSchedules.filter(s => s.created_by === userId)
-    : mockSchedules
+  try {
+    const response = await axios.get('http://localhost:8080/schedules', {
+      params: userId ? { userId } : {}
+    })
 
-  events.value = list.map(item => ({
-    id: item.id.toString(),
-    title: item.title,
-    start: item.date_time_start,
-    end: item.date_time_end
-  }))
+    console.log('API返回数据：', response.data)
 
-  nextTick(() => {
-    calendarRef.value?.getApi().setOption('events', events.value)
-  })
+    if (!Array.isArray(response.data)) {
+      console.error('取得したデータは配列ではありません:', response.data)
+      return
+    }
+
+    events.value = response.data.map(item => ({
+      id: item.id.toString(),
+      title: item.title,
+      start: item.startDateTime,
+      end: item.endDateTime
+    }))
+
+    nextTick(() => {
+      calendarRef.value?.getApi().setOption('events', events.value)
+    })
+  } catch (error) {
+    console.error('スケジュールの取得に失敗しました', error)
+  }
 })
 </script>
+
 
 <style>
 .calendar-container {

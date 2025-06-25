@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TopPage from '../views/TopPage.vue'
+import axios from 'axios'
+axios.defaults.withCredentials = true
 
 // スケジュール
 import ScheduleCalendar from '../views/Schedule/ScheduleCalendar.vue'
