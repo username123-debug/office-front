@@ -13,6 +13,29 @@
 
     <label>内容：</label>
     <textarea v-model="form.body"></textarea>
+        <label>参加者：</label>
+    <select v-model="selectedUserId">
+      <option disabled value="">-- 参加者を選択 --</option>
+      <option v-for="user in availableUsers" :key="user.id" :value="user.id">
+        {{ user.name }}
+      </option>
+    </select>
+    <button @click="addParticipant" :disabled="!selectedUserId">追加</button>
+
+      <table v-if="form.participants.length > 0" class="participant-table">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="id in form.participants" :key="id">
+            <td>{{ getUserName(id) }}</td>
+            <td><button @click="removeParticipant(id)">削除</button></td>
+          </tr>
+        </tbody>
+      </table>
 
     <label>作成者：</label>
     <input v-model="form.created_by_name" type="text" />
@@ -25,8 +48,9 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 
@@ -35,16 +59,60 @@ const form = reactive({
   date_time_start: '',
   date_time_end: '',
   body: '',
-  created_by_name: ''
+  participants: []
 })
+
+const allUsers = ref([])
+const selectedUserId = ref('')
+
+onMounted(async () => {
+  const res = await axios.get('http://localhost:8080/users/abstract')
+  allUsers.value = Object.entries(res.data).map(([id, name]) => ({
+    id: Number(id),
+    name
+  }))
+})
+
+const availableUsers = computed(() =>
+  allUsers.value.filter(user => !form.participants.includes(user.id))
+)
+
+function getUserName(id) {
+  const user = allUsers.value.find(u => u.id === id)
+  return user ? user.name : ''
+}
+
+function addParticipant() {
+  const id = Number(selectedUserId.value)
+  if (!form.participants.includes(id)) {
+    form.participants.push(id)
+    selectedUserId.value = ''
+  }
+}
+
+function removeParticipant(id) {
+  form.participants = form.participants.filter(pid => pid !== id)
+}
 
 function goBack() {
   router.push('/schedule')
 }
 
-function submit() {
-  alert('登録しました（※ 実際には保存されません）')
-  router.push('/schedule')
+async function submit() {
+  try {
+    await axios.post('http://localhost:8080/schedules', {
+      title: form.title,
+      startDateTime: form.date_time_start,
+      endDateTime: form.date_time_end,
+      body: form.body,
+      participants: form.participants
+    })
+    alert('登録しました')
+    router.push('/schedule')
+  } catch (err) {
+    alert('登録に失敗しました')
+    console.error(err)
+  }
 }
 </script>
 
@@ -108,5 +176,31 @@ button {
 
 button:hover {
   background-color: #2563eb;
+}
+
+.participant-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.participant-table th,
+.participant-table td {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.participant-table button {
+  padding: 4px 8px;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.participant-table button:hover {
+  background-color: #c62828;
 }
 </style>
