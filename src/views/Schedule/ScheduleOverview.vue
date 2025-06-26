@@ -32,7 +32,6 @@ import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { mockSchedules } from '../../mock/schedules'
 
 const router = useRouter()
 const route = useRoute()
@@ -46,13 +45,20 @@ const currentWeekStart = ref(today)
 const weekTitle = ref('')
 const employees = ref([])
 const calendarOptionsMap = ref({})
+const scheduleData = ref([])
 
 const getData = async () => {
-  const response = await axios.get('http://localhost:8080/users/abstract')
-  employees.value = Object.entries(response.data).map(([id, name]) => ({
-    id,
+  const [userRes, scheduleRes] = await Promise.all([
+    axios.get('http://localhost:8080/users/abstract'),
+    axios.get('http://localhost:8080/schedules')
+  ])
+
+  employees.value = Object.entries(userRes.data).map(([id, name]) => ({
+    id: Number(id),
     name
   }))
+
+  scheduleData.value = scheduleRes.data
   updateAllCalendars()
 }
 
@@ -81,16 +87,19 @@ function getEventsFor(userId) {
   const start = new Date(currentWeekStart.value)
   const end = new Date(start)
   end.setDate(start.getDate() + 7)
-  return mockSchedules
+
+  return scheduleData.value
     .filter(s => {
-      const d = new Date(s.date_time_start)
-      return s.created_by === userId && d >= start && d < end
+      const dStart = new Date(s.startDateTime)
+      const dEnd = new Date(s.endDateTime)
+      return (s.createdUserId === userId || (s.participants || []).includes(userId)) &&
+             dEnd > start && dStart < end
     })
     .map(s => ({
       id: s.id.toString(),
       title: s.title,
-      start: s.date_time_start,
-      end: s.date_time_end
+      start: s.startDateTime,
+      end: s.endDateTime
     }))
 }
 
@@ -157,8 +166,6 @@ function goToCalendar(userId) {
   router.push(`/calendar/${userId}`)
 }
 </script>
-
-
 
 <style>
 .overview-container {

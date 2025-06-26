@@ -82,25 +82,29 @@ const calendarOptions = reactive({
 })
 
 onMounted(async () => {
-  const userId = route.params.userId
+  const userId = Number(route.params.userId)
   try {
-    const response = await axios.get('http://localhost:8080/schedules', {
-      params: userId ? { userId } : {}
-    })
-
-    console.log('API返回数据：', response.data)
+    const response = await axios.get('http://localhost:8080/schedules')
 
     if (!Array.isArray(response.data)) {
       console.error('取得したデータは配列ではありません:', response.data)
       return
     }
 
-    events.value = response.data.map(item => ({
-      id: item.id.toString(),
-      title: item.title,
-      start: item.startDateTime,
-      end: item.endDateTime
-    }))
+    events.value = response.data
+      .filter(item =>
+        item.createdUserId === userId ||
+        (item.participants || []).some(p =>
+          typeof p === 'number' ? p === userId :
+          typeof p === 'object' ? p.id === userId : false
+        )
+      )
+      .map(item => ({
+        id: item.id.toString(),
+        title: item.title,
+        start: item.startDateTime,
+        end: item.endDateTime
+      }))
 
     nextTick(() => {
       calendarRef.value?.getApi().setOption('events', events.value)
@@ -111,33 +115,28 @@ onMounted(async () => {
 })
 </script>
 
-
 <style>
 .calendar-container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 24px;
 }
-
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
-
 .calendar-title {
   font-size: 20px;
   font-weight: bold;
   flex: 1;
   text-align: center;
 }
-
 .calendar-buttons {
   display: flex;
   gap: 8px;
 }
-
 .calendar-buttons button {
   background-color: #2c3e50;
   color: white;
@@ -147,24 +146,19 @@ onMounted(async () => {
   font-size: 14px;
   cursor: pointer;
 }
-
 .calendar-wrapper {
   overflow-x: auto;
   min-width: 900px;
 }
-
 .fc-event {
   cursor: pointer;
 }
-
 .fc-sunday-bg {
   background-color: #ffe5e5 !important;
 }
-
 .fc-saturday-bg {
   background-color: #e5f0ff !important;
 }
-
 .fc-custom-event {
   font-size: 0.8rem;
   line-height: 1.2;
