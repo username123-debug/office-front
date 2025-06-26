@@ -39,7 +39,7 @@ const routes = [
 
   // お知らせ
   { path: '/notice', name: 'NoticeView', component: NoticeView },
-  { path: '/detail', name: 'NoticeDetail', component: NoticeDetailView },
+  { path: '/detail/:id', name: 'NoticeDetail', component: NoticeDetailView },
   { path: '/addnotice', name: 'NoticeAdd', component: NoticeAddView },
 
   // 社員紹介
