@@ -1,6 +1,86 @@
-<!-- <template>
-  <div>
-    <header class="app-header">
+<script setup>
+import { onMounted, onUnmounted, ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
+
+const router = useRouter()
+const route = useRoute()
+
+// ログイン状態を管理
+// 初期ログイン状態false
+// 初期値：trueにしてログイン状態をスキップ
+const isLoggedIn = ref(true)
+
+// 現在のページがスケジュール関連ページかを判定
+const isSchedulePage = computed(() =>
+  route.path.startsWith('/schedule') ||
+  route.path.startsWith('/overview') ||
+  route.path.startsWith('/calendar')
+)
+
+// 現在のページがログインページ（"/"）かを判定
+const isLoginPage = computed(() => route.path === '/')
+
+// サイドバー検索用キーワード
+const keyword = ref('')
+
+// 検索ボタンクリック時の遷移処理（名前で検索）
+const goSearch = () => {
+  router.push({ path: '/overview', query: { keyword: keyword.value } })
+}
+
+// ホームボタンクリック時の遷移処理
+const goHome = () => {
+  router.push({ name: 'Introduce' })
+}
+
+// ログアウトボタンクリック時の遷移処理
+const logout = () => {
+  router.push({ name: 'Login' })
+}
+
+// ブラウザバック検知用フラグ
+let firstLoad = true
+
+// ログイン成功時の処理
+function onLoginSuccess() {
+  isLoggedIn.value = true
+  router.push('/top') // ← ログイン後にTopPageへリダイレクト
+}
+
+// 初回読み込み時のブラウザバック対策
+onMounted(() => {
+  window.onpopstate = async () => {
+    if (!firstLoad) {
+      alert('ブラウザバックを検出しました。ログアウトします。')
+      try {
+        await axios.post('/logout', null, { withCredentials: true })
+      } catch (e) {
+        console.warn('ログアウト時エラー', e)
+      }
+      isLoggedIn.value = false
+      router.replace('/')
+    }
+    firstLoad = false
+  }
+})
+
+// ページ破棄時にリスナー解除
+onUnmounted(() => {
+  window.onpopstate = null
+})
+</script>
+
+<template>
+  <!-- ログイン前：ログインページ（login componentを描画） -->
+  <RouterView v-if="!isLoggedIn" v-slot="{ Component }">
+    <component :is="Component" @login-success="onLoginSuccess" />
+  </RouterView>
+
+  <!-- ログイン後：レイアウト付き全体画面 -->
+  <div v-else class="with-header">
+    <!-- ログインページ以外でヘッダーを表示 -->
+    <header v-if="!isLoginPage" class="app-header">
       <nav class="main-nav">
         <router-link to="/schedule">スケジュール</router-link>
         <router-link to="/notice">お知らせ</router-link>
@@ -11,8 +91,11 @@
         <router-link to="/"><button>ログアウト</button></router-link>
       </div>
     </header>
-    <div class="app-layout with-header">
-      <aside v-if="isSchedulePage" class="sidebar">
+
+    <!-- ヘッダーの下、全体レイアウト -->
+    <div class="app-layout">
+      <!-- スケジュール関連ページでのみサイドバー表示 -->
+      <aside v-if="isSchedulePage && !isLoginPage" class="sidebar">
         <h1>スケジュール管理</h1>
         <nav>
           <ul>
@@ -26,6 +109,8 @@
           </div>
         </nav>
       </aside>
+
+      <!-- メインコンテンツエリア -->
       <main class="main-content">
         <router-view />
       </main>
@@ -33,50 +118,33 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-const route = useRoute()
-const router = useRouter()
-
-const isSchedulePage = computed(() =>
-  route.path.startsWith('/schedule') ||
-  route.path.startsWith('/overview') ||
-  route.path.startsWith('/calendar')
-)
-
-const keyword = ref('')
-
-const goSearch = () => {
-  router.push({ path: '/overview', query: { keyword: keyword.value } })
-}
-
-const goHome = () => {
-  router.push({ name: 'Introduce' })
-}
-
-const logout = () => {
-  router.push({ name: 'Login' })
-}
-</script>
-
 <style scoped>
+/* アプリ全体レイアウト初期化 */
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* ヘッダー設定 */
 .app-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 60px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
+
+/* ナビゲーションリンク */
 .main-nav a {
   margin-right: 12px;
   padding: 8px 16px;
@@ -88,11 +156,13 @@ const logout = () => {
 .main-nav a:hover {
   background: #f0f0f0;
 }
+
+/* ヘッダー右のボタン */
 .header-actions button {
   margin-left: 8px;
   padding: 6px 12px;
   border: none;
-  background: #79BD9A;
+  background: #79bd9a;
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -100,18 +170,28 @@ const logout = () => {
 .header-actions button:hover {
   background: #67aa85;
 }
+
+/* ヘッダー分の余白を確保 */
 .with-header {
-  margin-top: 60px;
+  padding-top: 60px;
+  height: 100vh;
+  box-sizing: border-box;
 }
+
+/* 全体レイアウト構成 */
 .app-layout {
   display: flex;
-  min-height: calc(100vh - 60px);
+  height: 100%;
 }
+
+/* サイドバーのデザイン */
 .sidebar {
   width: 220px;
   background-color: #f5f5f5;
   padding: 20px;
   border-right: 1px solid #ccc;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 .sidebar h1 {
   font-size: 18px;
@@ -133,6 +213,8 @@ const logout = () => {
 .sidebar nav a.router-link-exact-active {
   text-decoration: underline;
 }
+
+/* 検索エリア */
 .search-box {
   margin-top: 24px;
 }
@@ -155,117 +237,12 @@ const logout = () => {
 .search-box button:hover {
   background-color: #2563eb;
 }
+
+/* メイン表示部 */
 .main-content {
   flex: 1;
   padding: 20px;
+  box-sizing: border-box;
+  overflow: auto;
 }
-</style> -->
-
-
-<script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-import { useRouter, RouterLink, RouterView } from 'vue-router';
-import axios from 'axios';
-
-const router = useRouter();
-
-const isLoggedIn = ref(false); // 初期ログイン状態false
-
-let firstLoad = true;
-
-function onLoginSuccess(){
-  isLoggedIn.value = true;
-  // console.log('trueにしたぜ！！')
-}
-
-onMounted(() => {
-  window.onpopstate = async () => {
-    if (!firstLoad) {
-      alert('ブラウザバックを検出しました。ログアウトします。');
-      try {
-        await axios.post('/logout', null, { withCredentials: true });
-      } catch (e) {
-        console.warn('ログアウト時エラー', e);
-      }
-      router.replace('/');
-    }
-    firstLoad = false;
-  };
-});
-
-onUnmounted(() => {
-  window.onpopstate = null;
-});
-</script>
-
-<!-- <template>
-  <Login @login-success="onLoginSuccess" />
-  <header v-if="isLoggedIn">
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">ログアウト</RouterLink>
-        <RouterLink to="/schedule">スケジュール</RouterLink>
-        <RouterLink to="/notice">お知らせ</RouterLink>
-        <RouterLink to="/bio">社員紹介</RouterLink>
-      </nav>
-    </div>
-  </header>
-  <main>
-    <RouterView />
-  </main>
-</template> -->
-
-<template>
-  <header v-if="isLoggedIn">
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">ログアウト</RouterLink>
-        <RouterLink to="/schedule">スケジュール</RouterLink>
-        <RouterLink to="/notice">お知らせ</RouterLink>
-        <RouterLink to="/bio">社員紹介</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <!-- RouterViewのv-slotでComponentを受け取ってイベントを渡す -->
-  <main>
-    <RouterView v-slot="{ Component }">
-      <component :is="Component" @login-success="onLoginSuccess" />
-    </RouterView>
-  </main>
-</template>
-
-<style>
-  html,
-  body,
-  #app {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-
-  .app-layout {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  header {
-    /* もともとのスタイル */
-    width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #ccc;
-    flex-shrink: 0;
-    /* ヘッダーが縮まないように */
-  }
-
-  main {
-    flex-grow: 1;
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
-  }
 </style>

@@ -86,7 +86,7 @@ const login = async () => {
       console.log("管理者のページに遷移");
     } else {
       // 一般ユーザーの場合、トップページへ遷移
-      router.push("/home");
+      router.push("/top");
       console.log("一般ユーザーのページに遷移");
     }
   } catch (error) {
