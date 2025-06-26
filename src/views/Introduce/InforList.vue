@@ -10,14 +10,14 @@ import api from '@/plugin/axios.js';
 import {ref, onMounted,computed} from 'vue';
 
 // 初期データ
-const initialEmployees = [
-  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。', photo: photo001 },
-  { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
-  { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
-  { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
-  { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
-  { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
-]
+// const initialEmployees = [
+//   { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。', photo: photo001 },
+//   { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
+//   { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
+//   { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
+//   { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
+//   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
+// ]
 const employees = ref([]);
 
 //"/api/users/abstract"からidとnameだけを取得
