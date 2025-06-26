@@ -22,7 +22,7 @@ const employees = ref([]);
 
 //"/api/users/abstract"からidとnameだけを取得
 const getData = async () => {
-  const response = await api.get("/users/abstract/department");
+  const response = await api.get("/users/abstract/delete");
   console.log("response: ",response);
   console.log("response.data: ",response.data);
 
@@ -46,8 +46,8 @@ const filteredEmployees = computed(() =>
 onMounted(getData);
 </script>
 <template>
-  <div class="container">
-    <aside class="sidebar">
+  <div class="container" >
+    <aside class="sidebar" >
       <h2>社員紹介</h2>
       <ul class="menu">
         <li><a href="#">ホーム</a></li>
@@ -108,7 +108,7 @@ onMounted(getData);
       </ul>
     </aside>
 
-    <main class="content">
+    <main class="content" >
       <div class="section">
         <h2>このサイトについて</h2>
         <p>このサイトは社員の自己紹介ページです。</p>
@@ -125,18 +125,20 @@ onMounted(getData);
         <h2>新入社員</h2>
       </div>
 
-      <div class="employee-grid">
-        <div
-          class="employee-card"
+      <!-- <div class="employee-grid"v-if="employees &&employees.deleteFlag ===false" > -->
+        <div class="employee-grid" >
+        <div class="employee-card"
           v-for="employee in employees"
-          :key="employee.id"
+          :key="employee?.id"
         >
+        <div v-if="employee.deleteFlag === 'false'">
           <img :src="employee.photo" alt="写真" class="employee-photo" />
           <hr class="separator" />
           <RouterLink :to="`/introduce/detail/${employee.id}`" class="employee-name">
             {{ employee.name }}
           </RouterLink>
           <hr class="separator" />
+        </div>
         </div>
       </div>
     </main>
