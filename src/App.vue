@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <header class="app-header">
       <nav class="main-nav">
@@ -159,4 +159,113 @@ const logout = () => {
   flex: 1;
   padding: 20px;
 }
+</style> -->
+
+
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter, RouterLink, RouterView } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
+
+const isLoggedIn = ref(false); // 初期ログイン状態false
+
+let firstLoad = true;
+
+function onLoginSuccess(){
+  isLoggedIn.value = true;
+  // console.log('trueにしたぜ！！')
+}
+
+onMounted(() => {
+  window.onpopstate = async () => {
+    if (!firstLoad) {
+      alert('ブラウザバックを検出しました。ログアウトします。');
+      try {
+        await axios.post('/logout', null, { withCredentials: true });
+      } catch (e) {
+        console.warn('ログアウト時エラー', e);
+      }
+      router.replace('/');
+    }
+    firstLoad = false;
+  };
+});
+
+onUnmounted(() => {
+  window.onpopstate = null;
+});
+</script>
+
+<!-- <template>
+  <Login @login-success="onLoginSuccess" />
+  <header v-if="isLoggedIn">
+    <div class="wrapper">
+      <nav>
+        <RouterLink to="/">ログアウト</RouterLink>
+        <RouterLink to="/schedule">スケジュール</RouterLink>
+        <RouterLink to="/notice">お知らせ</RouterLink>
+        <RouterLink to="/bio">社員紹介</RouterLink>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <RouterView />
+  </main>
+</template> -->
+
+<template>
+  <header v-if="isLoggedIn">
+    <div class="wrapper">
+      <nav>
+        <RouterLink to="/">ログアウト</RouterLink>
+        <RouterLink to="/schedule">スケジュール</RouterLink>
+        <RouterLink to="/notice">お知らせ</RouterLink>
+        <RouterLink to="/bio">社員紹介</RouterLink>
+      </nav>
+    </div>
+  </header>
+
+  <!-- RouterViewのv-slotでComponentを受け取ってイベントを渡す -->
+  <main>
+    <RouterView v-slot="{ Component }">
+      <component :is="Component" @login-success="onLoginSuccess" />
+    </RouterView>
+  </main>
+</template>
+
+<style>
+  html,
+  body,
+  #app {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+
+  .app-layout {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    /* もともとのスタイル */
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    flex-shrink: 0;
+    /* ヘッダーが縮まないように */
+  }
+
+  main {
+    flex-grow: 1;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
 </style>

@@ -18,40 +18,30 @@ const backgroundStyle = {
   height: '100vh',
   width: '100vw',
 }
+//  ✅ 社員一覧を格納する（employeeData は使わない）
+const employeeList = ref([]);
 
-const selectedEmployee = ref(null)
+// ✅ APIから社員一覧を取得してemployeeListに代入
+const getEmployeeList = async () => {
+  const response = await api.get("/users/abstract/department");
+  employeeList.value = response.data;
+};
+onMounted(getEmployeeList);
 
-const selectEmployee = (employee) => {
-  selectedEmployee.value = employee
-}
-
-const route = useRoute()
-const router = useRouter()
-const id = route.params.id
-
-const employeeData = [
-  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhh', photo: photo001 },
-  { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
-  { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
-  { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
-  { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
-  { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
-]
-// const employees = ref(employeeData)
-// const employees = ref([]);
-
-// //"/api/users/abstract"からidとnameだけを取得
-// const getData = async () => {
-//   const response = await api.get("/users/abstract/department");
-//   console.log("response: ",response);
-//   console.log("response.data: ",response.data);
-
-//   employees.value = response.data;
-
-//   console.log("employees.value: ", employees.value);
-// };
+// ✅ 部門ごとに社員をフィルター
+const selectedDepartment = ref('');
+const filteredEmployees = computed(() =>
+  selectedDepartment.value
+    ? employeeList.value.filter(
+        e =>
+          e.myDepartment === selectedDepartment.value || // myDepartment が文字列の場合
+          e.myDepartment?.[0]?.name === selectedDepartment.value // 配列＋オブジェクト形式の場合
+      )
+    : employeeList.value
+);
 
 const employee = ref([]);
+
 
 const getData = async () => {
   const response = await api.get("/info/"+id);
@@ -63,6 +53,33 @@ const getData = async () => {
   console.log("employee.value.name: ", employee.value.name);
   console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
 };
+
+const selectedEmployee = ref(null)
+
+const selectEmployee = async (selected) => {
+  try {
+    const response = await api.get(`/info/${selected.id}`);
+    employee.value = response.data;
+    console.log('詳細取得:', employee.value);
+  } catch (error) {
+    console.error('詳細情報の取得に失敗しました:', error);
+  }
+};
+
+const route = useRoute()
+const router = useRouter()
+const id = route.params.id
+
+// const employeeData = [
+//   { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhh', photo: photo001 },
+//   { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
+//   { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
+//   { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
+//   { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
+//   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
+// ]
+
+
 
 const goToEdit = () => {
   router.push({
@@ -82,13 +99,7 @@ const toggleSubMenu = () => {
   showSubMenu.value = !showSubMenu.value
 }
 
-const selectedDepartment = ref('')
 
-const filteredEmployees = computed(() =>
-  selectedDepartment.value
-    ? employee.value.filter(e => e.myDepartment[0].name === selectedDepartment.value)
-    : employee.value
-)
 
 
 

@@ -2,32 +2,87 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import samplePhoto from '@/assets/anh nen.jpg'
+import api from '@/plugin/axios.js';
 
 const router = useRouter()
 
+// const employee = ref({
+//   id: Date.now().toString(),
+//   name: '',
+//   joinedAt: '',
+//   myDepartment: '',
+//   hobby: '',
+//   bio: '',
+//   photo: samplePhoto
+// })
+
+// const submitForm = () => {
+//   const existing = JSON.parse(localStorage.getItem('employees') || '[]')
+//   existing.push(employee.value)
+//   localStorage.setItem('employees', JSON.stringify(existing))
+//   router.push('/introduce')
+// }
+
 const employee = ref({
-  id: Date.now().toString(),
   name: '',
   joinedAt: '',
   myDepartment: '',
   hobby: '',
-  bio: '',
-  photo: samplePhoto
-})
+  bio: ''
+});
 
-const submitForm = () => {
-  const existing = JSON.parse(localStorage.getItem('employees') || '[]')
-  existing.push(employee.value)
-  localStorage.setItem('employees', JSON.stringify(existing))
-  router.push('/introduce')
-}
+const myDepartmentIds = ref({
+  "人事部": 1,
+  "経理部": 2,
+  "営業部": 3,
+  "IT部": 4,
+  "財務部": 5,
+  "生産部": 6
+});
+
+// const saveData = async () => {
+
+//   const selectedName = employee.value.myDepartment;
+// const selectedId = myDepartmentIds.value[selectedName];
+
+//   const res = await api.put("/info/test/" + id,{
+//     name: employee.value.name,
+//     hobby: employee.value.hobby,
+//     bio: employee.value.bio,
+//     myDepartment: [{
+//       id: employee.value.myDepartment?.[0]?.id,
+//       name: employee.value.myDepartment?.[0]?.name,
+//     }]
+//   });
+//   console.log("res: ", res);
+// };
+
+const saveData = async () => {
+  const selectedName = employee.value.myDepartment;
+  const selectedId = myDepartmentIds.value[selectedName]; // .valueは不要に変更した想定
+
+  const res = await api.post('/users/save', {
+    name: employee.value.name,
+    joinedAt: employee.value.joinedAt + '-01',
+    hobby: employee.value.hobby,
+    bio: employee.value.bio,
+    myDepartment: [{
+      id: selectedId,
+      name: selectedName,
+    }]
+  });
+
+  console.log("res:", res);
+};
+
+
 </script>
 
 <template>
   <div class="form-wrapper">
     <h1>新入社員追加</h1>
     <div class="employee-form">
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="saveData">
         <div class="form-group">
           <label>名前</label>
           <input v-model="employee.name" required />
@@ -35,7 +90,7 @@ const submitForm = () => {
 
         <div class="form-group">
           <label>入社年月</label>
-         <input v-model="joinedAt" type="month" required />
+         <input v-model="employee.joinedAt" type="month" required />
         </div>
 
         <div class="form-group">
@@ -43,9 +98,10 @@ const submitForm = () => {
           <select v-model="employee.myDepartment" required>
             <option>営業部</option>
             <option>人事部</option>
+            <option>経理部</option>
             <option>財務部</option>
-            <option>IT部門</option>
-            <option>生産部門</option>
+            <option>IT部</option>
+            <option>生産部</option>
           </select>
         </div>
 
