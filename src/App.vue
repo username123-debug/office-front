@@ -100,7 +100,7 @@ onUnmounted(() => {
         <nav>
           <ul>
             <li><router-link to="/schedule">総覧</router-link></li>
-            <li><router-link to="/calendar/000">マイカレンダー</router-link></li>
+            <li><router-link to="/calendar/1">マイカレンダー</router-link></li>
             <li><router-link to="/schedule/add">新規登録</router-link></li>
           </ul>
           <div class="search-box">

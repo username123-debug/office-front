@@ -53,14 +53,18 @@
 
 <script setup>
 import { ref, computed, watchEffect, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { mockSchedules } from '@/mock/schedules'
 
+const router = useRouter()
 const currentFirstDay = ref(getTodayStart())
 const calendarOptions = ref({})
 const weekTitle = ref('')
+const allSchedules = ref([])
+
+const FIXED_USER_ID = 1
 
 watchEffect(() => {
   const start = new Date(currentFirstDay.value)
@@ -68,6 +72,25 @@ watchEffect(() => {
   end.setDate(start.getDate() + 7)
 
   weekTitle.value = formatRange(start, end)
+
+  const filteredEvents = allSchedules.value
+    .filter(item => {
+      const d = new Date(item.startDateTime)
+      const isWithinWeek = d >= start && d < end
+      const isRelatedToUser =
+        item.createdUserId === FIXED_USER_ID ||
+        (item.participants || []).some(p =>
+          typeof p === 'number' ? p === FIXED_USER_ID :
+          typeof p === 'object' ? p.id === FIXED_USER_ID : false
+        )
+      return isWithinWeek && isRelatedToUser
+    })
+    .map(item => ({
+      id: item.id.toString(),
+      title: item.title,
+      start: item.startDateTime,
+      end: item.endDateTime
+    }))
 
   calendarOptions.value = {
     plugins: [dayGridPlugin],
@@ -82,22 +105,15 @@ watchEffect(() => {
       if (day === 0) arg.el.classList.add('fc-sunday-bg')
       if (day === 6) arg.el.classList.add('fc-saturday-bg')
     },
-    events: mockSchedules
-      .filter(s => {
-        const d = new Date(s.date_time_start)
-        return s.created_by === 'self' && d >= start && d < end
-      })
-      .map(s => ({
-        id: s.id.toString(),
-        title: s.title,
-        start: s.date_time_start,
-        end: s.date_time_end
-      })),
+    events: filteredEvents,
     eventContent: arg => {
       const d = new Date(arg.event.start)
       const hh = String(d.getHours()).padStart(2, '0')
       const mm = String(d.getMinutes()).padStart(2, '0')
       return { html: `<div style='font-size:0.85rem'>${hh}:${mm}<br/>${arg.event.title}</div>` }
+    },
+    eventClick: function(info) {
+      router.push(`/schedule/${info.event.id}`)
     }
   }
 })
@@ -136,22 +152,30 @@ function formatRange(start, end) {
   return `${s.getFullYear()}/${s.getMonth() + 1}/${s.getDate()} - ${e.getMonth() + 1}/${e.getDate()}`
 }
 
+// 今日スケジュール抽出用
 const todayStart = getTodayStart()
 const tomorrowStart = new Date(todayStart)
 tomorrowStart.setDate(tomorrowStart.getDate() + 1)
 
 const todaySchedules = computed(() =>
-  mockSchedules
-    .filter(s => {
-      const d = new Date(s.date_time_start)
-      return s.created_by === 'self' && d >= todayStart && d < tomorrowStart
+  allSchedules.value
+    .filter(item => {
+      const d = new Date(item.startDateTime)
+      const isToday = d >= todayStart && d < tomorrowStart
+      const isRelatedToUser =
+        item.createdUserId === FIXED_USER_ID ||
+        (item.participants || []).some(p =>
+          typeof p === 'number' ? p === FIXED_USER_ID :
+          typeof p === 'object' ? p.id === FIXED_USER_ID : false
+        )
+      return isToday && isRelatedToUser
     })
-    .sort((a, b) => new Date(a.date_time_start) - new Date(b.date_time_start))
-    .map(s => {
-      const d = new Date(s.date_time_start)
+    .sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime))
+    .map(item => {
+      const d = new Date(item.startDateTime)
       const hh = String(d.getHours()).padStart(2, '0')
       const mm = String(d.getMinutes()).padStart(2, '0')
-      return { id: s.id, title: s.title, time: `${hh}:${mm}` }
+      return { id: item.id, title: item.title, time: `${hh}:${mm}` }
     })
 )
 
@@ -159,10 +183,14 @@ const notices = ref([])
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:8080/notices')
-    notices.value = res.data
+    const [scheduleRes, noticeRes] = await Promise.all([
+      axios.get('http://localhost:8080/schedules'),
+      axios.get('http://localhost:8080/notices')
+    ])
+    allSchedules.value = scheduleRes.data
+    notices.value = noticeRes.data
   } catch (error) {
-    console.error('お知らせ取得失敗:', error)
+    console.error('データ取得失敗:', error)
   }
 })
 
@@ -175,6 +203,7 @@ const newestNotices = computed(() =>
 
 const formatDate = iso => new Date(iso).toLocaleDateString()
 </script>
+
 
 
 <style scoped>
