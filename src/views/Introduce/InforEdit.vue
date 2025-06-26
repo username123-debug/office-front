@@ -18,7 +18,7 @@ const router = useRouter()
 const id = route.params.id
 
 
-// const handleSubmit = () => {
+// const saveData = () => {
 //   router.push({
 //     name: 'IntroduceDetail',
 //     params: { id },
@@ -68,6 +68,10 @@ const saveData = async () => {
     }]
   });
   console.log("res: ", res);
+  router.push({
+    name: 'IntroduceDetail',
+    params: { id },
+  });
 };
 onMounted(getData);
 </script>
