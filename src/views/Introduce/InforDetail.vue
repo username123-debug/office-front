@@ -85,23 +85,19 @@ const goToEdit = () => {
   router.push({
     name: 'Edit',
     params: { id: employee.id },
-    query: {
-      name: employee.name,
-      joinedAt: employee.joinedAt,
-      myDepartment: employee.myDepartment,
-      hobby: employee.hobby,
-      bio: employee.bio
-    }
+    // query: {
+    //   name: employee.name,
+    //   joinedAt: employee.joinedAt,
+    //   myDepartment: employee.myDepartment,
+    //   hobby: employee.hobby,
+    //   bio: employee.bio
+    // }
   })
 }
 const showSubMenu = ref(false)
 const toggleSubMenu = () => {
   showSubMenu.value = !showSubMenu.value
 }
-
-
-
-
 
 
 const editJoinedAt = (string) => {
