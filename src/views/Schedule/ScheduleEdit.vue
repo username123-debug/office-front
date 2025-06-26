@@ -6,37 +6,16 @@
     <input v-model="form.title" type="text" />
 
     <label>開始日時：</label>
-    <input v-model="form.startDateTime" type="datetime-local" />
+    <input v-model="form.date_time_start" type="datetime-local" />
 
     <label>終了日時：</label>
-    <input v-model="form.endDateTime" type="datetime-local" />
+    <input v-model="form.date_time_end" type="datetime-local" />
 
     <label>内容：</label>
     <textarea v-model="form.body"></textarea>
 
-    <label>参加者：</label>
-    <select v-model="selectedUserId">
-      <option disabled value="">参加者を選択</option>
-      <option v-for="user in users" :key="user.id" :value="user.id">
-        {{ user.name }}
-      </option>
-    </select>
-    <button @click="addParticipant">追加</button>
-
-    <table v-if="form.participants && form.participants.length > 0">
-      <thead>
-        <tr>
-          <th>名前</th>
-          <th>削除</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="id in form.participants" :key="id">
-          <td>{{ getUserNameById(id) }}</td>
-          <td><button @click="removeParticipant(id)">削除</button></td>
-        </tr>
-      </tbody>
-    </table>
+    <label>作成者：</label>
+    <input v-model="form.created_by_name" type="text" />
 
     <div class="button-row">
       <button @click="goBack">キャンセル</button>
@@ -52,62 +31,27 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import { mockSchedules } from '../../mock/schedules'
 
 const route = useRoute()
 const router = useRouter()
 
 const form = ref(null)
-const users = ref([])
-const selectedUserId = ref('')
 
-onMounted(async () => {
+onMounted(() => {
   const id = route.params.id
-
-  // スケジュール取得
-  const scheduleRes = await axios.get(`http://localhost:8080/schedules/${id}`)
-  const data = scheduleRes.data
-
-  form.value = {
-    id: data.id,
-    title: data.title,
-    startDateTime: data.startDateTime?.slice(0, 16),
-    endDateTime: data.endDateTime?.slice(0, 16),
-    body: data.body,
-    participants: Array.isArray(data.participants) ? data.participants : []
+  const found = mockSchedules.find(item => item.id.toString() === id)
+  if (found) {
+    form.value = { ...found }
   }
-
-  // ユーザー一覧取得
-  const usersRes = await axios.get('http://localhost:8080/users/abstract')
-  users.value = Object.entries(usersRes.data).map(([id, name]) => ({
-    id: Number(id),
-    name
-  }))
 })
-
-function getUserNameById(id) {
-  const user = users.value.find(u => u.id === id)
-  return user ? user.name : ''
-}
-
-function addParticipant() {
-  const id = Number(selectedUserId.value)
-  if (!id || form.value.participants.includes(id)) return
-  form.value.participants.push(id)
-  selectedUserId.value = ''
-}
-
-function removeParticipant(id) {
-  form.value.participants = form.value.participants.filter(pid => pid !== id)
-}
 
 function goBack() {
   router.push('/schedule')
 }
 
-async function submit() {
-  await axios.put(`http://localhost:8080/schedules/${form.value.id}`, form.value)
-  alert('保存しました')
+function submit() {
+  alert('保存しました（※ 実際には更新されません）')
   router.push('/schedule')
 }
 </script>

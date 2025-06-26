@@ -2,18 +2,9 @@
   <div class="detail-container" v-if="schedule">
     <h2>スケジュール詳細</h2>
     <p><strong>タイトル：</strong>{{ schedule.title }}</p>
-    <p><strong>時間：</strong>{{ formatTime(schedule.startDateTime) }} ～ {{ formatTime(schedule.endDateTime) }}</p>
-    <p><strong>作成者：</strong>{{ schedule.createdUserId }}</p>
+    <p><strong>時間：</strong>{{ formatTime(schedule.date_time_start) }} ～ {{ formatTime(schedule.date_time_end) }}</p>
+    <p><strong>作成者：</strong>{{ schedule.created_by_name }}</p>
     <p><strong>内容：</strong>{{ schedule.body }}</p>
-
-    <p><strong>参加者：</strong></p>
-    <ul v-if="schedule.participants?.length">
-      <li v-for="id in schedule.participants" :key="id">
-        {{ getUserNameById(id) }}
-      </li>
-    </ul>
-    <p v-else>なし</p>
-
     <div class="button-row">
       <button @click="goBack">戻る</button>
       <button @click="goEdit">編集</button>
@@ -28,38 +19,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import { mockSchedules } from '../../mock/schedules'
 
 const route = useRoute()
 const router = useRouter()
 
 const schedule = ref(null)
-const users = ref([])
 
-onMounted(async () => {
+onMounted(() => {
   const id = route.params.id
-  try {
-    const res = await axios.get(`http://localhost:8080/schedules/${id}`, { withCredentials: true })
-    schedule.value = res.data
-  } catch (err) {
-    console.error('スケジュール取得失敗:', err)
-  }
-
-  try {
-    const usersRes = await axios.get('http://localhost:8080/users/abstract')
-    users.value = Object.entries(usersRes.data).map(([id, name]) => ({
-      id: Number(id),
-      name
-    }))
-  } catch (err) {
-    console.error('ユーザー一覧取得失敗:', err)
-  }
+  schedule.value = mockSchedules.find(item => item.id.toString() === id)
 })
-
-function getUserNameById(id) {
-  const user = users.value.find(u => u.id === id)
-  return user ? user.name : '名前不明'
-}
 
 function formatTime(datetimeStr) {
   const date = new Date(datetimeStr)

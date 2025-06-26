@@ -15,20 +15,40 @@
   const router = useRouter();
   const route = useRoute();
 
+
+  const username = ref('');
+  const findNameById = async (userId) =>{
+    try{
+      const res = await api.get(`/notices/createdUser/${userId}`)
+      console.log(res)
+      username.value = res.data.name;
+      console.log("username: ", username.value)
+    }catch (error){
+      console.log("error: ", error);
+    }
+  }
+
+
   //特定の一件を表示
   const findNotice = async () => {
     try {
       const noticeId = route.params.id;
       const res = await api.get(`/notices/${noticeId}`);
+      // console.log("res: ", res);  
       notice.id = res.data.id;
       notice.title = res.data.title;
       notice.body = res.data.body;
       notice.createdAt = res.data.createdAt;
-      notice.createdUserName = res.data.createdUserName;
+      // console.log(res.data.createdUserId);
+      findNameById(res.data.createdUserId);
+      notice.createdUserName = username.value; // ここでcreatedUserが取れてます。
+      // console.log("name:", notice.createdUserName);
+      
     } catch (error) {
       console.error(error);
     }
   }
+
 
   //公開日時
   const formatDate = (isoString) => {
@@ -47,7 +67,8 @@
 
 
 <template>
-  <div class="container2">
+  <p>test</p>
+  <!-- <div class="container2">
     <h2>お知らせ詳細</h2>
     <div class="box26">
       <p>タイトル:{{ notice.title }}</p>
@@ -62,7 +83,7 @@
     <div class="back">
       <button @click="router.push('/notice')">一覧に戻る</button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style>
