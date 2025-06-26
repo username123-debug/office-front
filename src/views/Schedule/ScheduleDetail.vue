@@ -19,7 +19,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { mockSchedules } from '../../mock/schedules'
 
 const route = useRoute()
 const router = useRouter()
