@@ -1,3 +1,4 @@
+<!-- テスト用ファイル -->
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, } from 'vue'
@@ -74,6 +75,17 @@ const filteredEmployees = computed(() =>
     ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
     : employees.value
 )
+
+// const query = route.query
+// employee = {
+//   ...employee,
+//   name: query.name || employee.name,
+//   joinDate: query.joinDate || employee.joinDate,
+//   myDepartment: query.myDepartment || employee.myDepartment,
+//   hobby: query.hobby || employee.hobby,
+//   bio: query.bio || employee.bio
+// }
+
 </script>
 
 <template>

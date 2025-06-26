@@ -8,6 +8,7 @@ import photo004 from '@/assets/sunflower.jpg'
 import photo005 from '@/assets/sunflower2.jpg'
 import photo006 from '@/assets/cloud.png'
 import backgroundImg from '@/assets/anh nen.jpg'
+import api from '@/plugin/axios.js';
 
 const backgroundStyle = {
   backgroundImage: `url(${backgroundImg})`,
@@ -29,32 +30,39 @@ const router = useRouter()
 const id = route.params.id
 
 const employeeData = [
-  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', photo: photo001 },
+  { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhh', photo: photo001 },
   { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
   { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
   { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
   { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
 ]
-const employees = ref(employeeData)
+// const employees = ref(employeeData)
+// const employees = ref([]);
 
-// let employee = employees.value.find(emp => emp.id === id) || {
-//   name: '不明',
-//   joinDate: '',
-//   myDepartment: '不明',
-//   hobby: '',
-//   bio: 'データが見つかりません。'
-// }
+// //"/api/users/abstract"からidとnameだけを取得
+// const getData = async () => {
+//   const response = await api.get("/users/abstract/department");
+//   console.log("response: ",response);
+//   console.log("response.data: ",response.data);
 
-// const query = route.query
-// employee = {
-//   ...employee,
-//   name: query.name || employee.name,
-//   joinDate: query.joinDate || employee.joinDate,
-//   myDepartment: query.myDepartment || employee.myDepartment,
-//   hobby: query.hobby || employee.hobby,
-//   bio: query.bio || employee.bio
-// }
+//   employees.value = response.data;
+
+//   console.log("employees.value: ", employees.value);
+// };
+
+const employee = ref([]);
+
+const getData = async () => {
+  const response = await api.get("/info/"+id);
+  console.log("response: ",response);
+  console.log("response.data: ",response.data);
+  console.log("response.data.id: ",response.data.id);
+  employee.value = response.data;
+  console.log("employee.value: ", employee.value);
+  console.log("employee.value.name: ", employee.value.name);
+  console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
+};
 
 const goToEdit = () => {
   router.push({
@@ -78,23 +86,12 @@ const selectedDepartment = ref('')
 
 const filteredEmployees = computed(() =>
   selectedDepartment.value
-    ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
-    : employees.value
+    ? employee.value.filter(e => e.myDepartment[0].name === selectedDepartment.value)
+    : employee.value
 )
 
 
-const employee = ref([]);
 
-const getData = async () => {
-  const response = await api.get("/info/"+id);
-  console.log("response: ",response);
-  console.log("response.data: ",response.data);
-  console.log("response.data.id: ",response.data.id);
-  employee.value = response.data;
-  console.log("employee.value: ", employee.value);
-  console.log("employee.value.name: ", employee.value.name);
-  console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
-};
 
 const editJoinedAt = (string) => {
   if(!string){
@@ -135,7 +132,7 @@ onMounted(getData);
           <a href="javascript:void(0)" @click="selectedDepartment = '人事部'">人事部門</a>
           <ul v-if="selectedDepartment === '人事部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
-              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+              <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
             </li>
           </ul>
         </li>
@@ -144,25 +141,25 @@ onMounted(getData);
           <a href="javascript:void(0)" @click="selectedDepartment = '財務部'">財務部門</a>
           <ul v-if="selectedDepartment === '財務部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
-              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+              <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
             </li>
           </ul>
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="selectedDepartment = '生産部門'">生産部門</a>
-          <ul v-if="selectedDepartment === '生産部門'" class="name-list">
+          <a href="javascript:void(0)" @click="selectedDepartment = '生産部'">生産部門</a>
+          <ul v-if="selectedDepartment === '生産部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
-              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+              <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
             </li>
           </ul>
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部門'">IT部門</a>
-          <ul v-if="selectedDepartment === 'IT部門'" class="name-list">
+          <a href="javascript:void(0)" @click="selectedDepartment = 'IT部'">IT部門</a>
+          <ul v-if="selectedDepartment === 'IT部'" class="name-list">
             <li v-for="e in filteredEmployees" :key="e.id">
-              <RouterLink :to="`/introduce/detail/${e.id}`">{{ e.name }}</RouterLink>
+              <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
             </li>
           </ul>
         </li>
@@ -193,7 +190,7 @@ onMounted(getData);
       <p><strong>◆入社年月：</strong> {{ employee.joinedAt }}</p>
     </transition>
     <transition name="fade" appear>
-      <p><strong>◆部署：</strong> {{ employee.myDepartment }}</p>
+      <p v-if="employee.myDepartment && employee.myDepartment.length>0"><strong>◆部署：</strong> {{ employee.myDepartment[0].name }}</p>
     </transition>
     <transition name="fade" appear>
       <p><strong>◆趣味：</strong> {{ employee.hobby }}</p>
