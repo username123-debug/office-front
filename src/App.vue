@@ -26,7 +26,7 @@ const keyword = ref('')
 
 // 検索ボタンクリック時の遷移処理（名前で検索）
 const goSearch = () => {
-  router.push({ path: '/overview', query: { keyword: keyword.value } })
+  router.push({ path: '/schedule', query: { keyword: keyword.value } })
 }
 
 // ホームボタンクリック時の遷移処理

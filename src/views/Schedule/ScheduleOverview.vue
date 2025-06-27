@@ -36,7 +36,15 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 const router = useRouter()
 const route = useRoute()
 
-const keyword = ref(route.query.keyword || '')
+const keyword = ref('')
+
+watch(
+  () => route.query.keyword,
+  newKeyword => {
+    keyword.value = newKeyword || ''
+  },
+  { immediate: true }
+)
 
 const today = new Date()
 today.setHours(0, 0, 0, 0)
