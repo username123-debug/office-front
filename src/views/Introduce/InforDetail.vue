@@ -197,6 +197,9 @@ onMounted(getData);
       <p><strong>◆入社年月：</strong> {{ employee.joinedAt }}</p>
     </transition>
     <transition name="fade" appear>
+      <p><strong>◆メールアドレス：</strong> {{ employee.email }}</p>
+    </transition>
+    <transition name="fade" appear>
       <p v-if="employee.myDepartment && employee.myDepartment.length>0"><strong>◆部署：</strong> {{ employee.myDepartment[0].name }}</p>
     </transition>
     <transition name="fade" appear>
