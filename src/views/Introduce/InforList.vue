@@ -3,9 +3,9 @@ import { RouterView } from 'vue-router'
 import photoinit from '@/assets/takiguchi.jpg'
 import photoinitadmin from '@/assets/summer.jpg'
 import phototaro from '@/assets/sun.jpg'
-import photoishihara from '@/assets/sunflower.jpg'
-import photofuruta from '@/assets/sunflower2.jpg'
-import phototakiguchi from '@/assets/takiguchi.jpg'
+import photoishihara from '@/assets/takiguchi.jpg'
+import photofuruta from '@/assets/furuta.jpg'
+import phototakiguchi from '@/assets/taki.jpg'
 import photoarai from '@/assets/cloud.png'
 import phototanguyen from '@/assets/nguyen.jpg'
 import phototawang from '@/assets/cloud.png'
@@ -59,6 +59,8 @@ const filteredEmployees = computed(() =>
 )
 onMounted(getData);
 </script>
+
+
 <template>
   <div class="container" >
     <aside class="sidebar" >
@@ -307,9 +309,8 @@ onMounted(getData);
 
 .employee-photo {
   width: 100%;
-  /* max-width: 150px; */
-   height: 66%; /* 上部3分の2 */
-  /* object-fit: cover; */
+  height: 180px; /* お好きな高さに統一（カード高さとバランス取る） */
+  object-fit: cover; /* 写真をトリミングして均等表示 */
   border-bottom: 1px solid #ccc;
   margin-bottom: 12px;
 }
