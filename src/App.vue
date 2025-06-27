@@ -23,7 +23,7 @@ const isLoginPage = computed(() => route.path === '/')
 
 // 検索実行
 const goSearch = () => {
-  router.push({ path: '/overview', query: { keyword: keyword.value } })
+  router.push({ path: '/schedule', query: { keyword: keyword.value } })
 }
 
 // ログイン成功時処理
