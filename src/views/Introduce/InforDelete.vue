@@ -1,4 +1,5 @@
 <template>
+  <div class="container">
   <div class="delete-page">
     <h2>社員情報削除</h2>
     <ul class="employee-list">
@@ -7,6 +8,7 @@
         <button @click="deleteEmployee(employee.id)">削除</button>
       </li>
     </ul>
+  </div>
   </div>
 </template>
 
@@ -75,8 +77,17 @@ onMounted(getData);
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 90vw;;
+  background-color: #f0f0f0;
+}
 .delete-page {
   padding: 20px;
+  width: 40vw;
 }
 .employee-list {
   list-style: none;
