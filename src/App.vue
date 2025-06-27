@@ -2,7 +2,9 @@
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+import api from '@/plugin/axios';
 
+//Vue Routerのフック
 const router = useRouter()
 const route = useRoute()
 
@@ -34,11 +36,6 @@ const goHome = () => {
   router.push({ name: 'Introduce' })
 }
 
-// ログアウトボタンクリック時の遷移処理
-const logout = () => {
-  router.push({ name: 'Login' })
-}
-
 // ブラウザバック検知用フラグ
 let firstLoad = true
 
@@ -54,7 +51,8 @@ onMounted(() => {
     if (!firstLoad) {
       alert('ブラウザバックを検出しました。ログアウトします。')
       try {
-        await axios.post('/logout', null, { withCredentials: true })
+        const res = await api.post('/logout', null, { withCredentials: true });
+        console.log("res: ", res);
       } catch (e) {
         console.warn('ログアウト時エラー', e)
       }
@@ -64,6 +62,11 @@ onMounted(() => {
     firstLoad = false
   }
 })
+
+const logout = async () =>{
+  const res = await api.post('/logout')
+  console.log (res)
+};
 
 // ページ破棄時にリスナー解除
 onUnmounted(() => {
@@ -88,7 +91,7 @@ onUnmounted(() => {
       </nav>
       <div class="header-actions">
         <router-link to="/top"><button>ホーム</button></router-link>
-        <router-link to="/"><button>ログアウト</button></router-link>
+        <router-link to="/"><button @click="logout">ログアウト</button></router-link>
       </div>
     </header>
 

@@ -13,6 +13,13 @@
 
   const notices = ref([]);
 
+  const nameMap=ref(new Map());
+
+  const getName = async (id) => {
+    const res = await api.get(`/users/${id}`);
+    return res.data.name;
+  };
+
   //一覧表示
   //2件目（最新の情報）が1件目の下に来てしまうことの修正必要
   const getNotices = async () => {
@@ -75,7 +82,15 @@
   //   if (currentPage.value < totalPages.value) currentPage.value++
   // }
 
-  onMounted(getNotices);
+  // onMounted(getNotices);
+
+  onMounted(()=>{
+    getNotices();
+    for(let i; i<notices.value.size(); i++){
+      const name = getName(notices.value.createdUserId);
+      newMap.value.set(notices.value.createdUserId,name);
+    }
+  });
 
 </script>
 

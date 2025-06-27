@@ -4,7 +4,67 @@
   import { useRoute, useRouter } from 'vue-router';
   import api from '@/plugin/axios.js';
 
-  const notice = reactive({
+  // const notice = reactive({
+  //   id: null,
+  //   title: '',
+  //   body: '',
+  //   createdAt: '',
+  //   createdUserName: '',
+  // });
+
+  // const router = useRouter();
+  // const route = useRoute();
+
+
+  // const username = ref('');
+  // const findNameById = async (userId) =>{
+  //   try{
+  //     const res = await api.get(`/notices/createdUser/${userId}`)
+  //     console.log(res)
+  //     username.value = res.data.name;
+  //     console.log("username: ", username.value)
+  //   }catch (error){
+  //     console.log("error: ", error);
+  //   }
+  // }
+
+
+  // //特定の一件を表示
+  // const findNotice = async () => {
+  //   try {
+  //     const noticeId = route.params.id;
+  //     const res = await api.get(`/notices/${noticeId}`);
+  //     // console.log("res: ", res);  
+  //     notice.id = res.data.id;
+  //     notice.title = res.data.title;
+  //     notice.body = res.data.body;
+  //     notice.createdAt = res.data.createdAt;
+  //     // console.log(res.data.createdUserId);
+  //     findNameById(res.data.createdUserId);
+  //     notice.createdUserName = username.value; // ここでcreatedUserが取れてます。
+  //     // console.log("name:", notice.createdUserName);
+      
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+
+  // //公開日時
+  // const formatDate = (isoString) => {
+  //   if (!isoString) return '';
+  //   const date = new Date(isoString);
+  //   const month = date.getMonth() + 1;
+  //   const day = date.getDate();
+  //   const hour = date.getHours();
+  //   const minute = date.getMinutes().toString().padStart(2, '0');
+  //   return `${month}月${day}日${hour}:${minute}`;
+  // };
+
+  // onMounted(findNotice);
+
+
+const notice = reactive({
     id: null,
     title: '',
     body: '',
@@ -15,39 +75,36 @@
   const router = useRouter();
   const route = useRoute();
 
-
-  const username = ref('');
-  const findNameById = async (userId) =>{
-    try{
-      const res = await api.get(`/notices/createdUser/${userId}`)
-      console.log(res)
-      username.value = res.data.name;
-      console.log("username: ", username.value)
-    }catch (error){
-      console.log("error: ", error);
-    }
-  }
-
-
-  //特定の一件を表示
-  const findNotice = async () => {
-    try {
-      const noticeId = route.params.id;
-      const res = await api.get(`/notices/${noticeId}`);
-      // console.log("res: ", res);  
-      notice.id = res.data.id;
-      notice.title = res.data.title;
-      notice.body = res.data.body;
-      notice.createdAt = res.data.createdAt;
-      // console.log(res.data.createdUserId);
-      findNameById(res.data.createdUserId);
-      notice.createdUserName = username.value; // ここでcreatedUserが取れてます。
-      // console.log("name:", notice.createdUserName);
-      
+// ユーザー検索(idで)
+  const getUserById = async (id) =>{
+     try {
+      const res = await api.get(`/users/` + id)
+      // console.log("userからとってきた名：：", res.data.name)
+      notice.createdUserName = res.data.name;
     } catch (error) {
       console.error(error);
     }
   }
+  
+  
+  const props = defineProps(['id']);
+  //特定の一件を表示
+  const getNoticeById = async (id) => {
+    try {
+      const res = await api.get(`/notices/` + id);
+      notice.title = res.data.title;
+      notice.body = res.data.body;
+      notice.createdAt = res.data.createdAt;
+      // console.log("res:", res.data.createdUserId);
+      getUserById(res.data.createdUserId)
+      // console.log("response", notice.createdUserName)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  
 
 
   //公開日時
@@ -61,14 +118,17 @@
     return `${month}月${day}日${hour}:${minute}`;
   };
 
-  onMounted(findNotice);
-
+  onMounted(() => {
+    // getAll();
+    getNoticeById(props.id)
+    getUserById(props.id);
+});
 </script>
 
 
 <template>
-  <p>test</p>
-  <!-- <div class="container2">
+  <!-- <p>test</p> -->
+  <div class="container2">
     <h2>お知らせ詳細</h2>
     <div class="box26">
       <p>タイトル:{{ notice.title }}</p>
@@ -83,7 +143,7 @@
     <div class="back">
       <button @click="router.push('/notice')">一覧に戻る</button>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style>
