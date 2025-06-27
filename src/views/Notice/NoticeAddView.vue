@@ -1,15 +1,14 @@
 <script setup>
   import axios from 'axios';
-  import { reactive } from 'vue';
+  import { reactive} from 'vue';
   import { useRouter } from 'vue-router';
   import api from '@/plugin/axios.js';
 
-  // const data = reactive({
-  //   title: '',
-  //   body: '',
-  // });
+  const data = reactive({
+    title: '',
+    body: '',
+  });
 
-  const data = ref([]);
 
   const router = useRouter();
 

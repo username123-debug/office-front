@@ -15,6 +15,11 @@ const NoticeView = () => import('../views/Notice/NoticeView.vue')
 const NoticeDetailView = () => import('../views/Notice/NoticeDetailView.vue')
 const NoticeAddView = () => import('../views/Notice/NoticeAddView.vue')
 
+//お知らせ
+// import NoticeView from '../views/Notice/NoticeView.vue';
+// import NoticeView from '../views/Notice/NoticeView.vue';
+// import NoticeView from '../views/Notice/NoticeView.vue';
+
 // 社員紹介
 import InforList from '../views/Introduce/InforList.vue'
 import InforDetail from '../views/Introduce/InforDetail.vue'
@@ -41,7 +46,7 @@ const routes = [
 
   // お知らせ
   { path: '/notice', name: 'NoticeView', component: NoticeView },
-  { path: '/notice/:id', name: 'NoticeView', component: NoticeDetailView, props:true },
+  { path: '/notice/:id', name: 'NoticeDetailView', component: NoticeDetailView, props:true },
   // { path: '/detail/:id', name: 'NoticeDetail', component: NoticeDetailView },
   { path: '/addnotice', name: 'NoticeAdd', component: NoticeAddView },
 
