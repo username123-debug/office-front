@@ -129,45 +129,55 @@ onMounted(getData);
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>
           <ul v-if="selectedDepartment === '営業部'" class="name-list">
-            <li v-for="e in filteredEmployees" :key="e.id">
+           <div v-for="e in filteredEmployees" :key="e.id">
+              <div v-if="e.deleteFlag !== 'true'">
                <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
-            </li>
+              </div>
+           </div>
           </ul>
         </li>
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '人事部'">人事部門</a>
           <ul v-if="selectedDepartment === '人事部'" class="name-list">
-            <li v-for="e in filteredEmployees" :key="e.id">
+           <div v-for="e in filteredEmployees" :key="e.id">
+              <div v-if="e.deleteFlag !== 'true'">
               <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
-            </li>
+              </div>
+           </div>
           </ul>
         </li>
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '財務部'">財務部門</a>
           <ul v-if="selectedDepartment === '財務部'" class="name-list">
-            <li v-for="e in filteredEmployees" :key="e.id">
+           <div v-for="e in filteredEmployees" :key="e.id">
+              <div v-if="e.deleteFlag !== 'true'">
               <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
-            </li>
+              </div>
+           </div>
           </ul>
         </li>
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '生産部'">生産部門</a>
           <ul v-if="selectedDepartment === '生産部'" class="name-list">
-            <li v-for="e in filteredEmployees" :key="e.id">
+            <div v-for="e in filteredEmployees" :key="e.id">
+              <div v-if="e.deleteFlag !== 'true'">
               <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
-            </li>
+              </div>
+            </div>
           </ul>
         </li>
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = 'IT部'">IT部門</a>
           <ul v-if="selectedDepartment === 'IT部'" class="name-list">
-            <li v-for="e in filteredEmployees" :key="e.id">
+            <div v-for="e in filteredEmployees" :key="e.id">
+              <div v-if="e.deleteFlag !== 'true'">
               <a href="javascript:void(0)" @click="selectEmployee(e)">{{ e.name }}</a>
-            </li>
+              </div>
+            </div>
           </ul>
         </li>
 
@@ -240,10 +250,11 @@ onMounted(getData);
 }
 .sidebar {
   width: 250px;
+
   /* background-color: #129350; */
   color: white;
   padding: 20px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 .sidebar h2 {
   font-size: 26px;
