@@ -27,10 +27,10 @@ import LoginView from '@/views/Login/LoginView.vue'
 const routes = [
   //ログイン
   { path: '/', name: 'Login', component: LoginView },
-  // トップページ
+  // トップページ(ROLE_USER用)
   { path: '/top', name: 'TopPage', component: TopPage },
-  //ROLE_USER用のトップページ
-  // { path: '/home', name: 'HomePage', component: TopPage},
+  //ROLE_ADMIN用のトップページ
+  { path: '/admin/home', name: 'HomePage', component: TopPage},
 
   // スケジュール
   { path: '/schedule', name: 'Overview', component: ScheduleOverview },

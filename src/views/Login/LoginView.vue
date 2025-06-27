@@ -80,13 +80,13 @@ const login = async () => {
     emit('login-success');
     // console.log("isLoggedIn: ", isLoggedIn.value);
     // ロールに応じて遷移先を分岐
-    if (user.role === "ADMIN" || user.role === "ROLE_ADMIN") {
+    if (user.value.role === "ADMIN" || user.value.role === "ROLE_ADMIN") {
       // 管理者の場合、管理者用ページへ遷移
       router.push("/admin/home");
-      console.log("管理者のページに遷移");
+      console.log("管理者のページに遷移（テスト用に一般ユーザーと同じページを表示中）");
     } else {
       // 一般ユーザーの場合、トップページへ遷移
-      router.push("/home");
+      router.push("/top");
       console.log("一般ユーザーのページに遷移");
     }
   } catch (error) {
