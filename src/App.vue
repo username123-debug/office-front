@@ -64,11 +64,6 @@ const logout = async () =>{
   console.log (res)
 };
 
-const logout = async () =>{
-  const res = await api.post('/logout')
-  console.log (res)
-}
-
 onUnmounted(() => {
   window.onpopstate = null
 })
