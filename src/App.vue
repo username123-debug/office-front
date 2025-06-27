@@ -91,7 +91,7 @@ onUnmounted(() => {
           <nav>
             <ul>
               <li><router-link to="/schedule">総覧</router-link></li>
-              <li><router-link to="/calendar/000">マイカレンダー</router-link></li>
+              <li><router-link to="/calendar/1">マイカレンダー</router-link></li>
               <li><router-link to="/schedule/add">新規登録</router-link></li>             
             </ul>
             <div class="search-box">
@@ -137,13 +137,12 @@ html, body, #app {
 .main-nav a {
   margin-right: 12px;
   padding: 8px 16px;
-  border: 1px solid #666;
+  border: 1px solid #2c3e50;
   border-radius: 4px;
   text-decoration: none;
-  color: #333;
-}
-.main-nav a:hover {
-  background: #f0f0f0;
+  color: #2c3e50;
+  font-weight: 500;
+  background-color: white;
 }
 
 /* ヘッダー右のボタン */
@@ -151,13 +150,11 @@ html, body, #app {
   margin-left: 8px;
   padding: 6px 12px;
   border: none;
-  background: #79bd9a;
+  background: #2c3e50;
   color: white;
   border-radius: 4px;
+  font-weight: 500;
   cursor: pointer;
-}
-.header-actions button:hover {
-  background: #67aa85;
 }
 
 /* ヘッダー分の余白確保 */
@@ -176,16 +173,20 @@ html, body, #app {
 /* サイドバー */
 .sidebar {
   width: 220px;
-  background: #f5f5f5;
+  background: #f8fafc;
   padding: 20px;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #d0d7de;
   box-sizing: border-box;
   overflow-y: auto;
 }
 .sidebar h1 {
   font-size: 18px;
   margin-bottom: 20px;
+  color: #2c3e50;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
 }
+
 .sidebar nav ul {
   list-style: none;
   padding: 0;
@@ -196,17 +197,20 @@ html, body, #app {
 }
 .sidebar nav a {
   text-decoration: none;
-  color: #10b981;
-  font-weight: bold;
+  color: #2c3e50;
+  font-weight: 500;
 }
+
 .sidebar nav a.router-link-exact-active {
   text-decoration: underline;
+  font-weight: 700;
+}
+
+.sidebar nav li {
+  margin-bottom: 20px;
 }
 
 /* 検索 */
-.search-box {
-  margin-top: 24px;
-}
 .search-box input {
   width: 100%;
   padding: 6px;
@@ -217,14 +221,11 @@ html, body, #app {
 .search-box button {
   width: 100%;
   padding: 6px;
-  background-color: #3c82f6;
+  background-color: #2c3e50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-.search-box button:hover {
-  background-color: #2563eb;
 }
 
 /* メインコンテンツ */
@@ -234,4 +235,5 @@ html, body, #app {
   overflow-y: auto;
   box-sizing: border-box;
 }
+
 </style>

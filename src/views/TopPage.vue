@@ -110,7 +110,9 @@ watchEffect(() => {
       const d = new Date(arg.event.start)
       const hh = String(d.getHours()).padStart(2, '0')
       const mm = String(d.getMinutes()).padStart(2, '0')
-      return { html: `<div style='font-size:0.85rem'>${hh}:${mm}<br/>${arg.event.title}</div>` }
+      return {
+        html: `<div class="fc-custom-event">${hh}:${mm}<br/>${arg.event.title}</div>`
+      }
     },
     eventClick: function(info) {
       router.push(`/schedule/${info.event.id}`)
@@ -251,6 +253,10 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   padding: 6px 12px;
   font-size: 14px;
   cursor: pointer;
+  font-weight: 500;
+}
+.nav-button:hover {
+  background-color: #1a1a1a;
 }
 
 .week-title {
@@ -281,9 +287,9 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 .notice-section h2 {
   margin-bottom: 12px;
   font-size: 1.1rem;
-  border-left: 4px solid #3c82f6;
+  border-left: 4px solid #2c3e50;
   padding-left: 8px;
-  color: #3c82f6;
+  color: #2c3e50;
 }
 
 .today-schedule ul,
@@ -300,9 +306,10 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 
 .today-schedule ul li a,
 .notice-section ul li a {
-  color: #000;
+  color: #2c3e50;
   font-size: 1rem;
   text-decoration: underline;
+  font-weight: 500;
 }
 
 .date {
@@ -317,11 +324,11 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 }
 
 .more-link {
-  color: #3c82f6;
+  color: #1f6feb;
   font-size: 0.9rem;
   text-decoration: none;
+  font-weight: 500;
 }
-
 .more-link:hover {
   text-decoration: underline;
 }
@@ -349,5 +356,20 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+.fc .fc-col-header-cell-cushion {
+  color: #2c3e50 !important;
+  font-weight: 600;
+}
+.fc .fc-daygrid-day-number {
+  color: #2c3e50 !important;
+  font-weight: 500;
+}
+.fc-custom-event {
+  font-size: 0.85rem;
+  line-height: 1.3;
+  color: #1f6feb;
+  text-decoration: underline;
+  font-weight: 500;
 }
 </style>

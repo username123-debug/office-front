@@ -171,4 +171,17 @@ onMounted(async () => {
   white-space: normal;
   word-break: break-word;
 }
+
+.fc-custom-event {
+  color: #1f6feb;
+  text-decoration: underline;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #2c3e50 !important;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #2c3e50 !important;
+}
 </style>
