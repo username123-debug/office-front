@@ -1,14 +1,30 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, onMounted } from 'vue'
-import photo001 from '@/assets/sky.jpg'
-import photo002 from '@/assets/summer.jpg'
-import photo003 from '@/assets/sun.jpg'
-import photo004 from '@/assets/sunflower.jpg'
-import photo005 from '@/assets/sunflower2.jpg'
-import photo006 from '@/assets/cloud.png'
+import photoinit from '@/assets/takiguchi.jpg'
+import photoinitadmin from '@/assets/summer.jpg'
+import phototaro from '@/assets/sun.jpg'
+import photoishihara from '@/assets/sunflower.jpg'
+import photofuruta from '@/assets/sunflower2.jpg'
+import phototakiguchi from '@/assets/takiguchi.jpg'
+import photoarai from '@/assets/cloud.png'
+import phototanguyen from '@/assets/nguyen.jpg'
+import phototawang from '@/assets/cloud.png'
+
 import backgroundImg from '@/assets/anh nen.jpg'
 import api from '@/plugin/axios.js';
+
+const photoMap = {
+  init: photoinit,
+  initadmin: photoinitadmin,
+  taro: phototaro,
+  ishihara: photoishihara,
+  furuta: photofuruta,
+  takiguchi: phototakiguchi,
+  arai: photoarai,
+  nguyen: phototanguyen,
+  wang: phototawang
+};
 
 const backgroundStyle = {
   backgroundImage: `url(${backgroundImg})`,
@@ -48,7 +64,11 @@ const getData = async () => {
   console.log("response: ",response);
   console.log("response.data: ",response.data);
   console.log("response.data.id: ",response.data.id);
-  employee.value = response.data;
+  const data = response.data;
+  // ★ 写真の割り当てを追加 ★
+  data.photo = photoMap[data.name?.toLowerCase()] || photoinit;
+
+  employee.value = data;
   console.log("employee.value: ", employee.value);
   console.log("employee.value.name: ", employee.value.name);
   console.log("employee.value.myDepartment[0].name: ", employee.value.myDepartment[0].name);
@@ -59,7 +79,12 @@ const selectedEmployee = ref(null)
 const selectEmployee = async (selected) => {
   try {
     const response = await api.get(`/info/${selected.id}`);
-    employee.value = response.data;
+   
+    const data = response.data;
+
+    // 写真をセット
+    data.photo = photoMap[data.name?.toLowerCase()] || photoinit;
+     employee.value = data;
     console.log('詳細取得:', employee.value);
   } catch (error) {
     console.error('詳細情報の取得に失敗しました:', error);
@@ -85,13 +110,6 @@ const goToEdit = () => {
   router.push({
     name: 'Edit',
     params: { id: employee.id },
-    // query: {
-    //   name: employee.name,
-    //   joinedAt: employee.joinedAt,
-    //   myDepartment: employee.myDepartment,
-    //   hobby: employee.hobby,
-    //   bio: employee.bio
-    // }
   })
 }
 const showSubMenu = ref(false)
@@ -108,6 +126,7 @@ const editJoinedAt = (string) => {
   return `${year}年${parseInt(month)}日`;
 };
 
+const isFaded = ref(false);
 
 onMounted(getData);
 
@@ -191,13 +210,14 @@ onMounted(getData);
       </ul>
     </aside>
 
-    <main class="content">
+    <main class="content":class="{ faded: isFaded }">
       <div class="detail-wrapper">
   <div class="left-column">
-    <transition name="fade" appear>
+    <transition name="fade" appear @before-enter="isFaded = true"
+  @after-enter="isFaded = true">
       <img :src="employee.photo" alt="写真" class="small-photo" />
     </transition>
-    <transition name="fade" appear>
+    <transition name="fade" appear >
       <h1>{{ employee.name }}</h1>
     </transition>
   </div>
@@ -209,30 +229,20 @@ onMounted(getData);
     <transition name="fade" appear>
       <p><strong>◆メールアドレス：</strong> {{ employee.email }}</p>
     </transition>
-    <transition name="fade" appear>
+    <transition name="fade" appear >
       <p v-if="employee.myDepartment && employee.myDepartment.length>0"><strong>◆部署：</strong> {{ employee.myDepartment[0].name }}</p>
     </transition>
-    <transition name="fade" appear>
+    <transition name="fade" appear >
       <p><strong>◆趣味：</strong> {{ employee.hobby }}</p>
     </transition>
-    <transition name="fade" appear>
+    <transition name="fade" appear >
       <p><strong>◆メッセージ：</strong><br />{{ employee.bio }}</p>
     </transition>
 
-    <transition name="fade" appear>
+    <transition name="fade" appear >
       <button class="edit-button" @click="goToEdit">▶ 編集</button>
     </transition>
   </div>
-
-<!-- <div class="right-column">
-        <p class="info-item1" style="margin-top: 100px;"><strong>◆入社年月：</strong> {{ editJoinedAt(employee.joinedAt) }}</p>
-        <p class="info-item2" style="margin-top: 60px;" v-if="employee.myDepartment && employee.myDepartment.length > 0"><strong>◆部署：</strong> {{ employee.myDepartment[0].name }}</p>
-        <p class="info-item3" style="margin-top: 60px;"><strong>◆趣味：</strong> {{ employee.hobby }}</p>
-        <p class="info-item4" style="margin-top: 60px;"><strong>◆メッセージ：</strong><br /> {{ employee.bio }}</p>
-        <p>
-       <button @click="goToEdit">▶ 編集</button>
-      </p>
-      </div> -->
 
 </div>
 
@@ -286,6 +296,17 @@ onMounted(getData);
   overflow-y: auto; /* ← スクロール可能に */
   max-height: 100vh;
 }
+
+.content {
+  padding: 30px;
+  transition: background-color 2s ease;
+  background-color: transparent; /* 最初は透明（写真だけ見える） */
+}
+
+.content.faded {
+  background-color: rgba(255, 255, 255, 0.6); /* 薄い白を上にかぶせる */
+}
+
 .detail-wrapper {
   display: flex;
   align-items: flex-start;

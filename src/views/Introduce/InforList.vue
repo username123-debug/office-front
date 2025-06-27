@@ -1,23 +1,29 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import photo001 from '@/assets/sky.jpg'
-import photo002 from '@/assets/summer.jpg'
-import photo003 from '@/assets/sun.jpg'
-import photo004 from '@/assets/sunflower.jpg'
-import photo005 from '@/assets/sunflower2.jpg'
-import photo006 from '@/assets/cloud.png'
+import photoinit from '@/assets/takiguchi.jpg'
+import photoinitadmin from '@/assets/summer.jpg'
+import phototaro from '@/assets/sun.jpg'
+import photoishihara from '@/assets/sunflower.jpg'
+import photofuruta from '@/assets/sunflower2.jpg'
+import phototakiguchi from '@/assets/takiguchi.jpg'
+import photoarai from '@/assets/cloud.png'
+import phototanguyen from '@/assets/nguyen.jpg'
+import phototawang from '@/assets/cloud.png'
+
 import api from '@/plugin/axios.js';
 import {ref, onMounted,computed} from 'vue';
 
-// 初期データ
-// const initialEmployees = [
-//   { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。', photo: photo001 },
-//   { id: '002', name: '山田 花子', myDepartment: '人事部', bio: '人事を担当しています。', photo: photo002 },
-//   { id: '003', name: '佐藤 一郎', myDepartment: 'IT部門', bio: 'ITエンジニアです。', photo: photo003 },
-//   { id: '004', name: '鈴木 次郎', myDepartment: '財務部', bio: '財務管理を担当しています。', photo: photo004 },
-//   { id: '005', name: '伊藤 三郎', myDepartment: '生産部門', bio: '生産ラインを担当しています。', photo: photo005 },
-//   { id: '006', name: '高橋 四郎', myDepartment: '営業部', bio: '営業戦略を担当しています。', photo: photo006 }
-// ]
+const photoMap = {
+  init: photoinit,
+  initadmin: photoinitadmin,
+  taro: phototaro,
+  ishihara: photoishihara,
+  furuta: photofuruta,
+  takiguchi: phototakiguchi,
+  arai: photoarai,
+  nguyen: phototanguyen,
+  wang: phototawang
+};
 const employees = ref([]);
 
 //"/api/users/abstract"からidとnameだけを取得
@@ -26,7 +32,10 @@ const getData = async () => {
   console.log("response: ",response);
   console.log("response.data: ",response.data);
 
-  employees.value = response.data;
+  employees.value = response.data.map(emp => ({
+  ...emp,
+  photo: photoMap[emp.name.toLowerCase()] || photoinit // 小文字でマッチ、なければ初期画像
+}));
 
   console.log("employees.value: ", employees.value);
 };
@@ -241,7 +250,6 @@ onMounted(getData);
   margin-bottom: 20px;
   border-radius: 6px;
   border: 1px solid #757575;
-  /* 右 + 下だけ太くする（上書き） */
   border-right: 6px solid #757575;
   border-bottom: 6px solid #757575;
 }
@@ -271,19 +279,16 @@ onMounted(getData);
 .employee-card {
   position: relative;
   overflow: hidden;
-  width: 180px;       /* 横幅小さめ */
-  height: 260px;      /* 縦長にする */
+  width: 180px;       
+  height: 260px;     
   background: white;
   /* border-radius: 20px; */
   padding: 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border: 1px solid #A8DBA8;
-  /* 右 + 下だけ太くする（上書き） */
-  /* border-right: 6px solid #A8DBA8;
-  border-bottom: 6px solid #A8DBA8; */
   display: flex;
   flex-direction: column; /* ← 縦並びに変更 */
-  align-items: center; /* 中央揃え */
+  align-items: center; 
 }
 .employee-card::after {
   content: '';
@@ -304,7 +309,7 @@ onMounted(getData);
   width: 100%;
   /* max-width: 150px; */
    height: 66%; /* 上部3分の2 */
-  object-fit: cover;
+  /* object-fit: cover; */
   border-bottom: 1px solid #ccc;
   margin-bottom: 12px;
 }
@@ -314,6 +319,7 @@ onMounted(getData);
   color: #1e3a8a;
   text-decoration: none;
   font-weight: bold;
+  text-align: center;
 }
 
 .employee-name:hover {
