@@ -101,6 +101,7 @@ const saveData = async () => {
 </script>
 
 <template>
+  <div class="container">
   <div class="form-wrapper">
     <h1>新入社員追加</h1>
     <div class="employee-form">
@@ -115,17 +116,17 @@ const saveData = async () => {
          <input v-model="employee.joinedAt" type="month" required />
         </div>
 
-        <div>
+        <div class="form-group">
           <label>メールアドレス</label>
           <input v-model="employee.email" type="email" required />
         </div>
 
-        <div>
+        <div class="form-group">
           <label>パスワード</label>
           <input v-model="employee.password" type="password" required />
         </div>
 
-        <div>
+        <div class="form-group">
           <label>パスワード（再入力）</label>
           <input v-model="confirmPassword" type="password" required />
         </div>
@@ -162,24 +163,33 @@ const saveData = async () => {
     <div v-if="checkPassword" style="color:red">
   パスワードが一致しません。
 </div>
-
+</div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 90vw;
+  background-color: #f0f4f8;
+}
 .form-wrapper {
-  max-width: 600px;
-  margin: 50px auto;
-  font-family: 'Segoe UI', sans-serif;
+  width: 50vw;
+  margin: 60px auto;
+  padding: 40px 30px;
   background: #f4f8ff;
-  padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 h1 {
   text-align: center;
+  font-size: 24px;
   color: #333;
   margin-bottom: 30px;
 }
@@ -187,18 +197,19 @@ h1 {
 .employee-form {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  gap: 6px;
 }
 
 .form-group label {
-  font-weight: bold;
-  margin-bottom: 6px;
+  font-weight: 600;
   color: #333;
+  font-size: 14px;
 }
 
 .form-group input,
@@ -207,11 +218,21 @@ h1 {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #4977d8;
+  outline: none;
 }
 
 .form-group textarea {
   min-height: 80px;
+  resize: vertical;
 }
 
 .form-group.center {
@@ -221,15 +242,28 @@ h1 {
 button[type="submit"] {
   background-color: #4977d8;
   color: white;
-  padding: 10px 25px;
+  padding: 12px 30px;
   border: none;
   border-radius: 10px;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 button[type="submit"]:hover {
   background-color: #365db5;
 }
+
+@media (max-width: 600px) {
+  .form-wrapper {
+    padding: 25px 20px;
+    margin: 30px 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
 </style>
+

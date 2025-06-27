@@ -234,10 +234,9 @@ onMounted(getData);
 
 <style scoped>
 .container {
-  display: flex;
-  height: auto; /* ← ここを変更 */
-  min-height: 100vh; /* 最低限画面全体の高さは確保 */
-  font-family: sans-serif;
+   display: flex;
+  height: 100vh;
+  width: 90vw;
 }
 .sidebar {
   width: 250px;
