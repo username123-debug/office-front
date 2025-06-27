@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios';
-  import { reactive } from 'vue';
+  import { reactive} from 'vue';
   import { useRouter } from 'vue-router';
   import api from '@/plugin/axios.js';
 
@@ -9,14 +9,22 @@
     body: '',
   });
 
+
   const router = useRouter();
 
   //記事追加
   const addNotice = async () => {
     try {
-      const url = '/notices';
-      const res = await api.post(url, data);
-      console.log("追加データ", res.data);
+      const url = `/notices`;
+      
+      const res = await api.post(url, {
+        body: data.value.body,
+        title: data.value.title,
+        createdAt: data.value.createdAt,
+        createdUserId: data.value.createdUserId
+
+      });
+      console.log("res.data", res.data);
 
       data.title = '';
       data.body = '';

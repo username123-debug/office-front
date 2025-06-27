@@ -4,17 +4,6 @@
   import { useRoute, useRouter } from 'vue-router';
   import api from '@/plugin/axios.js';
 
-  // const notice = reactive({
-  //   id: null,
-  //   title: '',
-  //   body: '',
-  //   createdAt: '',
-  //   createdUserName: '',
-  // });
-
-  // const router = useRouter();
-  // const route = useRoute();
-
 
   // const username = ref('');
   // const findNameById = async (userId) =>{

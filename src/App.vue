@@ -74,6 +74,37 @@ onUnmounted(() => {
       <component :is="Component" @login-success="onLoginSuccess" />
     </RouterView>
 
+  <!-- ログイン後：レイアウト付き全体画面 -->
+  <!-- <div v-else class="with-header"> -->
+    <!-- ログインページ以外でヘッダーを表示 -->
+    <!-- <header v-if="!isLoginPage" class="app-header">
+      <nav class="main-nav">
+        <router-link to="/schedule">スケジュール</router-link>
+        <router-link to="/notice">お知らせ</router-link>
+        <router-link to="/introduce">社員紹介</router-link>
+      </nav>
+      <div class="header-actions">
+        <router-link to="/top"><button>ホーム</button></router-link>
+        <router-link to="/"><button @click="logout">ログアウト</button></router-link>
+      </div>
+    </header> -->
+
+    <!-- ヘッダーの下、全体レイアウト -->
+    <!-- <div class="app-layout"> -->
+      <!-- スケジュール関連ページでのみサイドバー表示 -->
+      <!-- <aside v-if="isSchedulePage && !isLoginPage" class="sidebar">
+        <h1>スケジュール管理</h1>
+        <nav>
+          <ul>
+            <li><router-link to="/schedule">総覧</router-link></li>
+            <li><router-link to="/calendar/1">マイカレンダー</router-link></li>
+            <li><router-link to="/schedule/add">新規登録</router-link></li>
+          </ul>
+          <div class="search-box">
+            <input v-model="keyword" placeholder="名前で検索" />
+            <button @click="goSearch">検索</button>
+          </div> -->
+    <!-- ログインしていたら画面全体表示 -->
     <div v-else class="with-header">
       <!-- ログインページ以外ならヘッダー表示 -->
       <header v-if="!isLoginPage" class="app-header">
