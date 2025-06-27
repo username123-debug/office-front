@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter, RouterView } from 'vue-router'
 import axios from 'axios'
-import api from '@/plugin/axios'
+// import api from '@/plugin/axios'
 import api from '@/plugin/axios';
 
 // Vue Routerのフック

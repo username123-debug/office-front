@@ -8,35 +8,43 @@
     title: '',
     body: '',
     createdAt: '',
-    creater: '',
+    // creater: '',
   });
 
+  const createdUserName = ref('');
   const notices = ref([]);
 
-  const nameMap=ref(new Map());
-
-  const getName = async (id) => {
-    const res = await api.get(`/users/${id}`);
-    return res.data.name;
-  };
-
+  const nameMap=ref(new Map()); 
+  
   //一覧表示
   //2件目（最新の情報）が1件目の下に来てしまうことの修正必要
   const getNotices = async () => {
     try {
       const res = await api.get('/notices');
       notices.value = res.data;
-      console.log("res: ", res)
-      console.log("res.data: ", res.data)
+      console.log("resAll: ", res)
+      console.log("notices.value", notices.value)
+      // console.log("id: ", res.data.createdUserId)
+      // getName(res.data.createdUserId)
+      // console.log("res.data: ", res.data)
     } catch (error) {
       console.error(error);
     }
   };
 
-  const router = useRouter();
+  // const getName = async (id) =>{
+  //   const res = await api.get(`/users/${id}`)
+  //   console.log("res", res)
+  //   console.log("Name", res.data.name)
+  //   createdUserName.value = res.data.name;
+  // }
 
-  // const currentPage = ref(1)
-  // const perPage = 5
+  const getName = async (id) => {
+    const res = await api.get(`/users/${id}`);
+    console.log("res.data.name", res.data.name)
+    return res.data.name;
+  };
+  const router = useRouter();
 
   //削除機能
   const deleteNotices = async (id) => {
@@ -47,7 +55,7 @@
     try {
       const res = await api.delete(`/notices/` + id);
       await getNotices();
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.log("error: ", error)
     }
@@ -64,34 +72,30 @@
     return `${month}月${day}日${hour}:${minute}`;
   }
 
-  //   ページネーション  
-  // const paginatedNotices = computed(() => {
-  //   const start = (currentPage.value - 1) * perPage
-  //   return notices.value.slice(start, start + perPage)
-  // })
+  // onMounted(()=>{
+  //   getNotices();
+  //   for(let i = 0; i<notices.value.length; i++){
+  //     const name = getName(notices.value.createdUserId);
+  //     nameMap.value.set(notices.value.createdUserId,name);
+  //     console.log("nameMap", nameMap)
+  //   }
+  //   console.log("nameMap", nameMap)
+  // });
+onMounted(async () => {
+  await getNotices(); // getNotices の完了を待つ
 
-  // const totalPages = computed(() =>
-  //   Math.ceil(notices.value.length / perPage)
-  // )
+  for (let i = 0; i < notices.value.length; i++) {
+    const id = notices.value[i].createdUserId;
 
-  // const prevPage = () => {
-  //   if (currentPage.value > 1) currentPage.value--
-  // }
-
-  // const nextPage = () => {
-  //   if (currentPage.value < totalPages.value) currentPage.value++
-  // }
-
-  // onMounted(getNotices);
-
-  onMounted(()=>{
-    getNotices();
-    for(let i; i<notices.value.size(); i++){
-      const name = getName(notices.value.createdUserId);
-      newMap.value.set(notices.value.createdUserId,name);
+    // すでに取得済みのIDはスキップ
+    if (!nameMap.value.has(id)) {
+      const name = await getName(id); // 名前を非同期で取得
+      nameMap.value.set(id, name); // Mapに保存
     }
-  });
+  }
 
+  console.log("nameMap", nameMap.value);
+});
 </script>
 
 <template>
@@ -126,7 +130,8 @@
                 <router-link :to="`/detail/${notice.id}`">{{notice.title}}</router-link>
               </td>
               <td>{{ formatDate(notice.createdAt) }}</td>
-              <td>{{ notice.createdUserName }}</td>
+              <!-- <td>{{ getName(notice.createdUserId) }}</td> -->
+               <td>{{ nameMap.get(notice.createdUserId) }}</td>
               <td><button @click="deleteNotices(notice.id)">削除</button></td>
             </tr>
           </tbody>
