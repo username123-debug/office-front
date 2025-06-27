@@ -38,6 +38,11 @@ const toggleSubMenu = () => {
 
 const selectedDepartment = ref('')
 
+
+const visibleEmployees = computed(() =>
+  employees.value.filter(e => e.deleteFlag === 'false')
+)
+
 const filteredEmployees = computed(() =>
   selectedDepartment.value
     ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
@@ -125,12 +130,12 @@ onMounted(getData);
         <h2>新入社員</h2>
       </div>
 
-      <!-- <div class="employee-grid"v-if="employees &&employees.deleteFlag ===false" > -->
         <div class="employee-grid" >
-        <div class="employee-card"
-          v-for="employee in employees"
+        <div 
+          class="employee-card"
+          v-for="employee in visibleEmployees"
           :key="employee?.id"
-        >
+        > 
         <div v-if="employee.deleteFlag === 'false'">
           <img :src="employee.photo" alt="写真" class="employee-photo" />
           <hr class="separator" />
@@ -140,7 +145,7 @@ onMounted(getData);
           <hr class="separator" />
         </div>
         </div>
-      </div>
+        </div>
     </main>
 
     <RouterView />
@@ -153,6 +158,7 @@ onMounted(getData);
   display: flex;
   height: 100vh;
   width: 100vw;
+  
   /* font-family: sans-serif; */
 }
 
@@ -205,7 +211,7 @@ onMounted(getData);
   flex: 1;
   padding: 40px;
   background-color: #fdfdfd;
-  overflow-y: visible;
+  /* overflow-y: visible; */
 }
 
 /* 大見出し */
