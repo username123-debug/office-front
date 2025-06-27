@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref ,onMounted} from 'vue'
+import { ref ,onMounted, computed} from 'vue'
 import backgroundImg from '@/assets/anh nen.jpg'
 import api from '@/plugin/axios.js'
 
@@ -37,6 +37,7 @@ const id = route.params.id
 
 const employee = ref({
   name: '',
+  email:'',
   hobby: '',
   bio: '',
   myDepartment: [{ id: '', name: '' }]
@@ -58,8 +59,10 @@ const getData = async () => {
 };
 
 const saveData = async () => {
-  const res = await api.put("/info/test/" + id, {
+  try{
+    const res = await api.put("/info/test/" + id, {
     name: employee.value.name,
+    email: employee.value.email,
     hobby: employee.value.hobby,
     bio: employee.value.bio,
     myDepartment: [{
@@ -72,7 +75,17 @@ const saveData = async () => {
     name: 'IntroduceDetail',
     params: { id },
   });
+
+  router.push('/introduce');
+
+  }catch(error){
+    console.error("エラーが発生しました：", error);
+  }
+  
 };
+
+
+
 onMounted(getData);
 </script>
 
@@ -97,6 +110,8 @@ onMounted(getData);
          <form @submit.prevent="saveData">
   <label>名前：<input v-model="employee.name" type="text" /></label>
 
+  <label>メールアドレス：<input v-model="employee.email" type="text"required /></label>
+
   <label v-if="employee.myDepartment && employee.myDepartment.length">
     部署：<input v-model="employee.myDepartment[0].name" type="text" />
   </label>
@@ -107,8 +122,6 @@ onMounted(getData);
 
   <button type="submit">保存</button>
 </form>
-
-
 
       </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import samplePhoto from '@/assets/anh nen.jpg'
 import api from '@/plugin/axios.js';
@@ -25,6 +25,8 @@ const router = useRouter()
 
 const employee = ref({
   name: '',
+  email: '',
+  password: '',
   joinedAt: '',
   myDepartment: '',
   hobby: '',
@@ -39,6 +41,8 @@ const myDepartmentIds = ref({
   "財務部": 5,
   "生産部": 6
 });
+
+const confirmPassword = ref('');
 
 // const saveData = async () => {
 
@@ -57,12 +61,25 @@ const myDepartmentIds = ref({
 //   console.log("res: ", res);
 // };
 
+const checkPassword = computed(()=> {
+  return employee.value.password && confirmPassword.value && employee.value.password != confirmPassword.value;
+});
+
 const saveData = async () => {
-  const selectedName = employee.value.myDepartment;
-  const selectedId = myDepartmentIds.value[selectedName]; // .valueは不要に変更した想定
+
+  if(checkPassword.value){
+    alert("パスワードが一致しません");
+    return;
+  }
+
+  try{
+    const selectedName = employee.value.myDepartment;
+  const selectedId = myDepartmentIds.value[selectedName];
 
   const res = await api.post('/users/save', {
     name: employee.value.name,
+    email: employee.value.email,
+    pasword: employee.value.password,
     joinedAt: employee.value.joinedAt + '-01',
     hobby: employee.value.hobby,
     bio: employee.value.bio,
@@ -73,6 +90,11 @@ const saveData = async () => {
   });
 
   console.log("res:", res);
+
+  }catch(error){
+    console.error("エラーが発生：", error);
+  }
+  
 };
 
 
@@ -92,6 +114,22 @@ const saveData = async () => {
           <label>入社年月</label>
          <input v-model="employee.joinedAt" type="month" required />
         </div>
+
+        <div>
+          <label>メールアドレス</label>
+          <input v-model="employee.email" type="email" required />
+        </div>
+
+        <div>
+          <label>パスワード</label>
+          <input v-model="employee.password" type="password" required />
+        </div>
+
+        <div>
+          <label>パスワード（再入力）</label>
+          <input v-model="confirmPassword" type="password" required />
+        </div>
+
 
         <div class="form-group">
           <label>部署</label>
@@ -120,6 +158,11 @@ const saveData = async () => {
         </div>
       </form>
     </div>
+
+    <div v-if="checkPassword" style="color:red">
+  パスワードが一致しません。
+</div>
+
   </div>
 </template>
 

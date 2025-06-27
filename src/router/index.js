@@ -29,6 +29,8 @@ const routes = [
   { path: '/', name: 'Login', component: LoginView },
   // トップページ
   { path: '/top', name: 'TopPage', component: TopPage },
+  //ROLE_USER用のトップページ
+  // { path: '/home', name: 'HomePage', component: TopPage},
 
   // スケジュール
   { path: '/schedule', name: 'Overview', component: ScheduleOverview },
@@ -39,6 +41,7 @@ const routes = [
 
   // お知らせ
   { path: '/notice', name: 'NoticeView', component: NoticeView },
+  // { path: '/notice/:id', name: 'NoticeView', component: NoticeDetailView },
   { path: '/detail/:id', name: 'NoticeDetail', component: NoticeDetailView },
   { path: '/addnotice', name: 'NoticeAdd', component: NoticeAddView },
 
