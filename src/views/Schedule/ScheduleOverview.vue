@@ -137,7 +137,7 @@ function getCalendarOptions(userId) {
       const hh = String(d.getHours()).padStart(2, '0')
       const mm = String(d.getMinutes()).padStart(2, '0')
       return {
-        html: `<div style='font-size:0.85rem'>${hh}:${mm}<br/>${arg.event.title}</div>`
+        html: `<div class="fc-custom-event">${hh}:${mm}<br/>${arg.event.title}</div>`
       }
     }
   }
@@ -234,5 +234,30 @@ function goToCalendar(userId) {
 }
 .fc-saturday-bg {
   background-color: #e5f0ff !important;
+}
+/* イベントタイトル */
+.fc-custom-event {
+  font-size: 0.85rem;
+  line-height: 1.3;
+  color: #1f6feb;
+  text-decoration: underline;
+  font-weight: 500;
+  padding-left: 2px;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #2c3e50 !important;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #2c3e50 !important;
+}
+
+.fc .fc-day-today {
+  background-color: #fffce0 !important;
+}
+
+.fc-event:hover {
+  background-color: #f0f4fa;
 }
 </style>

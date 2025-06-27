@@ -3,7 +3,7 @@
     <h2>スケジュール詳細</h2>
     <p><strong>タイトル：</strong>{{ schedule.title }}</p>
     <p><strong>時間：</strong>{{ formatTime(schedule.startDateTime) }} ～ {{ formatTime(schedule.endDateTime) }}</p>
-    <p><strong>作成者：</strong>{{ schedule.createdUserId }}</p>
+    <p><strong>作成者：</strong>{{ getUserNameById(schedule.createdUserId) }}</p>
     <p><strong>内容：</strong>{{ schedule.body }}</p>
 
     <p><strong>参加者：</strong></p>
@@ -88,31 +88,63 @@ function confirmDelete() {
 
 <style scoped>
 .detail-container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fefefe;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 32px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  font-size: 1rem;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+.detail-container h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.detail-container p {
+  margin-bottom: 12px;
+}
+
+.detail-container strong {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.detail-container ul {
+  padding-left: 1.2rem;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.detail-container ul li {
+  margin: 4px 0;
 }
 
 .button-row {
-  margin-top: 20px;
+  margin-top: 28px;
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
-  background-color: #3c82f6;
+  background-color: #2c3e50;
   color: white;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 button:hover {
-  background-color: #2563eb;
+  background-color: #1a1a1a;
 }
 </style>

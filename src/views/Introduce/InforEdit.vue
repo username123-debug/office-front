@@ -76,7 +76,7 @@ const saveData = async () => {
     params: { id },
   });
 
-  router.push('/introduce');
+  router.push('/introduce/detail/' + id);
 
   }catch(error){
     console.error("エラーが発生しました：", error);
@@ -95,18 +95,6 @@ onMounted(getData);
     <div class="overlay">
       <h2>情報編集ページ</h2>
       <div class="form-content">
-        <!-- <div class="photo-section">
-          <img :src="photo" alt="社員写真" class="preview-photo" />
-          <input type="file" @change="handleFileChange" />
-        </div> -->
-
-        <!-- <form @submit.prevent="handleSubmit">
-          <label>名前：<input v-model="name" type="text" /></label>
-          <label>部署：<input v-model="myDepartment" type="text" /></label>
-          <label>趣味：<input v-model="hobby" type="text" /></label> 
-          <label>メッセージ：<textarea v-model="bio" rows="4"></textarea></label>
-          <button type="submit">保存</button>
-        </form> -->
          <form @submit.prevent="saveData">
   <label>名前：<input v-model="employee.name" type="text" /></label>
 
@@ -132,11 +120,13 @@ onMounted(getData);
 <style scoped>
 .edit-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-family: sans-serif;
+   justify-content: center; /* ← 横方向中央 */
+  align-items: center;     /* ← 縦方向中央 */
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
 }
+
 h2{
   color: white;
   text-align: center;
@@ -147,9 +137,10 @@ h2{
   background-color: rgba(221, 232, 222, 0.6);
   padding: 30px;
   border-radius: 12px;
-  width: 90%;
+  width: 85%;
   max-width: 450px;
   color: white;
+  box-sizing: border-box; /* ← 横はみ出し防止 */
 }
 
 .form-content {

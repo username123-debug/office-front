@@ -119,37 +119,50 @@ async function submit() {
 
 <style scoped>
 .add-container {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 24px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fefefe;
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 32px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
 }
 
 .form-title {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
-  white-space: nowrap;
+  color: #2c3e50;
+  margin-bottom: 8px;
 }
 
 label {
-  font-weight: bold;
+  font-weight: 500;
+  color: #2c3e50;
   margin-top: 0.5rem;
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 10px 12px;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   box-sizing: border-box;
+  background-color: #fafafa;
+  transition: border 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #1f6feb;
+  outline: none;
 }
 
 textarea {
@@ -157,47 +170,50 @@ textarea {
   height: 6rem;
 }
 
-.button-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
 button {
-  padding: 0.5rem 1.5rem;
-  background-color: #3c82f6;
+  padding: 10px 20px;
+  background-color: #2c3e50;
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 button:hover {
-  background-color: #2563eb;
+  background-color: #1a1a1a;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .participant-table {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 12px;
   border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
 .participant-table th,
 .participant-table td {
-  padding: 6px 12px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   text-align: left;
 }
 
 .participant-table button {
-  padding: 4px 8px;
+  padding: 6px 12px;
   background-color: #e53935;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .participant-table button:hover {
