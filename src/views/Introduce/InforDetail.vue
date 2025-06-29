@@ -14,6 +14,10 @@ import phototawang from '@/assets/cloud.png'
 import backgroundImg from '@/assets/anh nen.jpg'
 import api from '@/plugin/axios.js';
 
+const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
+
 const photoMap = {
   init: photoinit,
   initadmin: photoinitadmin,
@@ -91,9 +95,7 @@ const selectEmployee = async (selected) => {
   }
 };
 
-const route = useRoute()
-const router = useRouter()
-const id = route.params.id
+
 
 // const employeeData = [
 //   { id: '001', name: '田中 太郎', myDepartment: '営業部', bio: '営業を担当しています。hhhhh', photo: photo001 },

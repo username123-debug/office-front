@@ -57,6 +57,7 @@ onMounted(() => {
   }
 })
 
+//ログアウト処理.
 const logout = async () =>{
   const res = await api.post('/logout')
   console.log (res)

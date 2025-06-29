@@ -6,23 +6,6 @@ import api from '@/plugin/axios.js';
 
 const router = useRouter()
 
-// const employee = ref({
-//   id: Date.now().toString(),
-//   name: '',
-//   joinedAt: '',
-//   myDepartment: '',
-//   hobby: '',
-//   bio: '',
-//   photo: samplePhoto
-// })
-
-// const submitForm = () => {
-//   const existing = JSON.parse(localStorage.getItem('employees') || '[]')
-//   existing.push(employee.value)
-//   localStorage.setItem('employees', JSON.stringify(existing))
-//   router.push('/introduce')
-// }
-
 const employee = ref({
   name: '',
   email: '',
@@ -44,126 +27,119 @@ const myDepartmentIds = ref({
 
 const confirmPassword = ref('');
 
-// const saveData = async () => {
-
-//   const selectedName = employee.value.myDepartment;
-// const selectedId = myDepartmentIds.value[selectedName];
-
-//   const res = await api.put("/info/test/" + id,{
-//     name: employee.value.name,
-//     hobby: employee.value.hobby,
-//     bio: employee.value.bio,
-//     myDepartment: [{
-//       id: employee.value.myDepartment?.[0]?.id,
-//       name: employee.value.myDepartment?.[0]?.name,
-//     }]
-//   });
-//   console.log("res: ", res);
-// };
-
-const checkPassword = computed(()=> {
+const checkPassword = computed(() => {
   return employee.value.password && confirmPassword.value && employee.value.password != confirmPassword.value;
 });
 
 const saveData = async () => {
 
-  if(checkPassword.value){
+  try{
+    const nameAndPass = await api.post("/users/check",{
+      name: employee.value.name,
+      password: employee.value.password
+    });
+    console.log("競合userのチェック:", nameAndPass);
+  }catch(error){
+    console.log("名前とパスワードの組が一致する人物が存在します:", error);
+    return;
+  }
+
+  if (checkPassword.value) {
     alert("パスワードが一致しません");
     return;
   }
 
-  try{
+  try {
     const selectedName = employee.value.myDepartment;
-  const selectedId = myDepartmentIds.value[selectedName];
+    const selectedId = myDepartmentIds.value[selectedName];
 
-  const res = await api.post('/users/save', {
-    name: employee.value.name,
-    email: employee.value.email,
-    pasword: employee.value.password,
-    joinedAt: employee.value.joinedAt + '-01',
-    hobby: employee.value.hobby,
-    bio: employee.value.bio,
-    myDepartment: [{
-      id: selectedId,
-      name: selectedName,
-    }]
-  });
+    const res = await api.post('/users/save', {
+      name: employee.value.name,
+      email: employee.value.email,
+      password: employee.value.password,
+      joinedAt: employee.value.joinedAt + '-01',
+      hobby: employee.value.hobby,
+      bio: employee.value.bio,
+      myDepartment: [{
+        id: selectedId,
+        name: selectedName,
+      }]
+    });
 
-  console.log("res:", res);
+    console.log("res:", res);
 
-  }catch(error){
-    console.error("エラーが発生：", error);
+  } catch (error) {
+    console.error("ユーザーの追加でエラーが発生：", error);
   }
-  
-};
 
+};
 
 </script>
 
 <template>
   <div class="container">
-  <div class="form-wrapper">
-    <h1>新入社員追加</h1>
-    <div class="employee-form">
-      <form @submit.prevent="saveData">
-        <div class="form-group">
-          <label>名前</label>
-          <input v-model="employee.name" required />
-        </div>
+    <div class="form-wrapper">
+      <h1>新入社員追加</h1>
+      <div class="employee-form">
+        <form @submit.prevent="saveData">
+          <div class="form-group">
+            <label>名前</label>
+            <input v-model="employee.name" required />
+          </div>
 
-        <div class="form-group">
-          <label>入社年月</label>
-         <input v-model="employee.joinedAt" type="month" required />
-        </div>
+          <div class="form-group">
+            <label>入社年月</label>
+            <input v-model="employee.joinedAt" type="month" required />
+          </div>
 
-        <div class="form-group">
-          <label>メールアドレス</label>
-          <input v-model="employee.email" type="email" required />
-        </div>
+          <div class="form-group">
+            <label>メールアドレス</label>
+            <input v-model="employee.email" type="email" required />
+          </div>
 
-        <div class="form-group">
-          <label>パスワード</label>
-          <input v-model="employee.password" type="password" required />
-        </div>
+          <div class="form-group">
+            <label>パスワード</label>
+            <input v-model="employee.password" type="password" required />
+          </div>
 
-        <div class="form-group">
-          <label>パスワード（再入力）</label>
-          <input v-model="confirmPassword" type="password" required />
-        </div>
+          <div class="form-group">
+            <label>パスワード（再入力）</label>
+            <input v-model="confirmPassword" type="password" required />
+          </div>
 
 
-        <div class="form-group">
-          <label>部署</label>
-          <select v-model="employee.myDepartment" required>
-            <option>営業部</option>
-            <option>人事部</option>
-            <option>経理部</option>
-            <option>財務部</option>
-            <option>IT部</option>
-            <option>生産部</option>
-          </select>
-        </div>
+          <div class="form-group">
+            <label>部署</label>
+            <select v-model="employee.myDepartment" required>
+              <option>営業部</option>
+              <option>人事部</option>
+              <option>経理部</option>
+              <option>財務部</option>
+              <option>IT部</option>
+              <option>生産部</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label>趣味</label>
-          <input v-model="employee.hobby" />
-        </div>
+          <div class="form-group">
+            <label>趣味</label>
+            <input v-model="employee.hobby" />
+          </div>
 
-        <div class="form-group">
-          <label>メッセージ</label>
-          <textarea v-model="employee.bio"></textarea>
-        </div>
+          <div class="form-group">
+            <label>メッセージ</label>
+            <textarea v-model="employee.bio"></textarea>
+          </div>
 
-        <div class="form-group center">
-          <button type="submit">▶ 追加する</button>
-        </div>
-      </form>
+          <div class="form-group center">
+            <button type="submit">▶ 追加する</button>
+          </div>
+        </form>
+      </div>
+
+      <div v-if="checkPassword" style="color:red">
+        パスワードが一致しません。
+      </div>
     </div>
-
-    <div v-if="checkPassword" style="color:red">
-  パスワードが一致しません。
-</div>
-</div>
   </div>
 </template>
 
@@ -177,6 +153,7 @@ const saveData = async () => {
   width: 90vw;
   background-color: #f0f4f8;
 }
+
 .form-wrapper {
   width: 50vw;
   margin: 60px auto;
@@ -266,4 +243,3 @@ button[type="submit"]:hover {
   }
 }
 </style>
-

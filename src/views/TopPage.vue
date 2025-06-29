@@ -28,7 +28,7 @@
               <li v-if="todaySchedules.length === 0">予定はありません。</li>
             </ul>
             <div class="more-link-wrapper">
-              <router-link to="/Schedule" class="more-link">もっと見る</router-link>
+              <router-link to="/schedule" class="more-link">もっと見る</router-link>
             </div>
           </section>
 

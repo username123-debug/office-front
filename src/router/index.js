@@ -14,6 +14,7 @@ import ScheduleOverview from '../views/Schedule/ScheduleOverview.vue'
 const NoticeView = () => import('../views/Notice/NoticeView.vue')
 const NoticeDetailView = () => import('../views/Notice/NoticeDetailView.vue')
 const NoticeAddView = () => import('../views/Notice/NoticeAddView.vue')
+import EditNotice from '../views/Notice/NoticeEditView.vue';
 
 //お知らせ
 // import NoticeView from '../views/Notice/NoticeView.vue';
@@ -47,8 +48,9 @@ const routes = [
   // お知らせ
   { path: '/notice', name: 'NoticeView', component: NoticeView },
   { path: '/notice/:id', name: 'NoticeDetailView', component: NoticeDetailView, props:true },
-  // { path: '/detail/:id', name: 'NoticeDetail', component: NoticeDetailView },
+  { path: '/detail/:id', name: 'NoticeDetail', component: NoticeDetailView, props:true },
   { path: '/addnotice', name: 'NoticeAdd', component: NoticeAddView },
+  { path: '/editnotice/:id', name: 'EditNotice', component: EditNotice},
 
   // 社員紹介
   { path: '/introduce', name: 'IntroduceList', component: InforList },

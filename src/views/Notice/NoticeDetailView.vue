@@ -64,6 +64,8 @@ const notice = reactive({
   const router = useRouter();
   const route = useRoute();
 
+  const noticeId = route.params.id;
+
 // ユーザー検索(idで)
   const getUserById = async (id) =>{
      try {
@@ -91,8 +93,6 @@ const notice = reactive({
       console.error(error);
     }
   }
-
-
   
 
 
@@ -128,7 +128,7 @@ const notice = reactive({
       </p>
       <p class="writer">掲載者:{{ notice.createdUserName }} </p>
     </div>
-    <button @click="router.push('/editnotice')">編集へ</button>
+    <button @click="router.push('/editnotice/' + noticeId)">編集へ</button>
     <div class="back">
       <button @click="router.push('/notice')">一覧に戻る</button>
     </div>

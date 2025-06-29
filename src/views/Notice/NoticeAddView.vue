@@ -18,11 +18,10 @@
       const url = `/notices`;
       
       const res = await api.post(url, {
-        body: data.value.body,
-        title: data.value.title,
-        createdAt: data.value.createdAt,
-        createdUserId: data.value.createdUserId
-
+        body: data.body,
+        title: data.title
+        // createdAt: data.value.createdAt,
+        // createdUserId: data.value.createdUserId
       });
       console.log("res.data", res.data);
 

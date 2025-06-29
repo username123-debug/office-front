@@ -59,6 +59,19 @@ const getData = async () => {
 };
 
 const saveData = async () => {
+
+
+  try {
+    const myPassword = await api.post("/users/check/me", {
+      password: employee.value.password
+    });
+    console.log("パスワードの登録が可能な状態", myPassword);
+  } catch (error) {
+    alert("現在のパスワードと同じです。新しいパスワードを登録してください。");
+    console.error("新旧パスワードが一致", error);
+    return;
+  }
+
   try{
     const res = await api.put("/info/test/" + id, {
     name: employee.value.name,
