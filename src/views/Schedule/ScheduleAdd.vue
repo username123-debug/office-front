@@ -105,7 +105,7 @@ async function submit() {
       startDateTime: form.date_time_start,
       endDateTime: form.date_time_end,
       body: form.body,
-      participants: form.participants
+      participantIds: form.participants
     })
     alert('登録しました')
     router.push('/schedule')
