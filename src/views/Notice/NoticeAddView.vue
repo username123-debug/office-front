@@ -45,7 +45,10 @@
   <textarea v-model="data.body"></textarea>
   <p class="length">文字数：{{ data.body.length }}</p>
 
-  <button @click="addNotice">追加</button>
+    <div class="button-group">
+      <button @click="addNotice">追加</button>
+      <button @click="router.push('/notice')" type="button">戻る</button>
+    </div>
 </div>
 </template>
 
@@ -118,4 +121,13 @@
   box-sizing: border-box;
   padding: 0.5em 1em 2em !important;
 }
+.button-group {
+  margin-top: 1em;
+  display: flex;
+}
+
+.button-group button + button {
+  margin-left: 0.5em;
+}
+
 </style>
