@@ -71,7 +71,9 @@ const saveData = async () => {
   } catch (error) {
     console.error("ユーザーの追加でエラーが発生：", error);
   }
-
+ 
+  
+  router.push('/introduce'); 
 };
 
 </script>
