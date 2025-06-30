@@ -74,9 +74,12 @@ onMounted(() => {
   getData()
 })
 
-const filteredEmployees = computed(() =>
-  employees.value.filter(e => !keyword.value || e.name.includes(keyword.value))
-)
+const filteredEmployees = computed(() => {
+  const lowerKeyword = keyword.value.toLowerCase()
+  return employees.value.filter(e =>
+    !lowerKeyword || e.name.toLowerCase().includes(lowerKeyword)
+  )
+})
 
 watch(currentWeekStart, () => {
   updateAllCalendars()
