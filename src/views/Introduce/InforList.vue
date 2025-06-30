@@ -200,7 +200,7 @@ onMounted(()=>{
 .sidebar {
   width: 250px;
   height: 250vh;
-  background-color: #129350;
+  background-color: #2ca675;
   color: white;
   padding: 20px;
   /* overflow-y: auto; */
