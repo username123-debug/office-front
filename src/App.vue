@@ -140,7 +140,7 @@ onUnmounted(() => {
 
         <!-- メインコンテンツ -->
         <main class="main-content">
-          <RouterView />
+          <RouterView :key="$route.fullPath" />
         </main>
       </div>
     </div>
