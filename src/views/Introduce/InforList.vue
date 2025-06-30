@@ -25,6 +25,7 @@ const photoMap = {
   wang: phototawang
 };
 const employees = ref([]);
+const myRole = ref('');
 
 //"/api/users/abstract"からidとnameだけを取得
 const getData = async () => {
@@ -57,7 +58,18 @@ const filteredEmployees = computed(() =>
     ? employees.value.filter(e => e.myDepartment === selectedDepartment.value)
     : employees.value
 )
-onMounted(getData);
+
+const getRole = async () => {
+  const role = await api.get("/users/myrole");
+  console.log("ログイン中のユーザーロール",role);
+  myRole.value = role.data;
+  console.log("myRole.value:", myRole.value);
+};
+
+onMounted(()=>{
+  getData();
+  getRole();
+});
 </script>
 
 
@@ -126,7 +138,7 @@ onMounted(getData);
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="toggleSubMenu">そのほか</a>
+          <a href="javascript:void(0)" @click="toggleSubMenu" v-if="myRole == 'ROLE_ADMIN'">そのほか</a>
           <ul v-if="showSubMenu" class="submenu">
             <li><router-link to="/introduce/add">社員紹介追加</router-link></li>
             <li><router-link to="/introduce/delete">社員情報削除</router-link></li>

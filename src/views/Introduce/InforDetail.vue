@@ -61,6 +61,7 @@ const filteredEmployees = computed(() =>
 );
 
 const employee = ref([]);
+const myRole = ref('');
 
 
 const getData = async () => {
@@ -130,7 +131,16 @@ const editJoinedAt = (string) => {
 
 const isFaded = ref(false);
 
-onMounted(getData);
+const getRole = async () => {
+  const role = await api.get("/users/myrole");
+  console.log("ログイン中のユーザーロール",role);
+  myRole.value = role.data;
+};
+
+onMounted(()=>{
+  getData();
+  getRole();
+});
 
 </script>
 
@@ -203,7 +213,7 @@ onMounted(getData);
         </li>
 
         <li>
-          <a href="javascript:void(0)" @click="toggleSubMenu">そのほか</a>
+          <a href="javascript:void(0)" @click="toggleSubMenu" v-if="myRole == 'ROLE_ADMIN'">そのほか</a>
           <ul v-if="showSubMenu" class="submenu">
             <li><router-link to="/introduce/add">社員紹介追加</router-link></li>
             <li><router-link to="/introduce/delete">社員情報削除</router-link></li>
@@ -242,7 +252,7 @@ onMounted(getData);
     </transition>
 
     <transition name="fade" appear >
-      <button class="edit-button" @click="goToEdit">▶ 編集</button>
+      <button class="edit-button" @click="goToEdit" v-if="myRole == 'ROLE_ADMIN'">▶ 編集</button>
     </transition>
   </div>
 
