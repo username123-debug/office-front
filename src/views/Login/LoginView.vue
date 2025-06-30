@@ -75,18 +75,27 @@ const login = async () => {
 <style scoped>
 
 .login-hero {
-  width: 90vw;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
+
+
   background-image: url('@/assets/man hinh.jpeg');
+  background-position: center center;
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
-  /* 中央揃え用に flexbox を追加 */
+
+
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* 任意：縦に要素を並べたい場合 */
+  flex-direction: column;
 }
+
+
 .logo {
   display: block;
   margin: 0 auto 20px;
