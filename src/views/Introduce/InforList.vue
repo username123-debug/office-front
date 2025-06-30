@@ -191,7 +191,7 @@ onMounted(()=>{
 .container {
   display: flex;
   height: 100vh;
-  width: 90vw;
+  width: 93vw;
   
   /* font-family: sans-serif; */
 }
