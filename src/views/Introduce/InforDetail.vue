@@ -305,8 +305,6 @@ onMounted(()=>{
 .content {
   flex: 1;
   position: relative;
-  overflow-y: auto; /* ← スクロール可能に */
-  max-height: 100vh;
 }
 
 .content {
