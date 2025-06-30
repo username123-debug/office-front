@@ -106,10 +106,16 @@ function goBack() {
 }
 
 async function submit() {
-  await axios.put(`http://localhost:8080/schedules/${form.value.id}`, form.value)
-  alert('保存しました')
-  router.push('/schedule')
+  try {
+    await axios.put(`http://localhost:8080/schedules/${form.value.id}`, form.value)
+    alert('保存しました')
+    router.push('/schedule')
+  } catch (error) {
+    console.error('保存エラー:', error)
+    alert('保存に失敗しました')
+  }
 }
+
 </script>
 
 <style scoped>

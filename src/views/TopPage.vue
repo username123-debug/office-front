@@ -21,7 +21,7 @@
             <h2>今日のスケジュール</h2>
             <ul>
               <li v-for="s in todaySchedules" :key="s.id">
-                <router-link :to="`/schedule/${s.id}`">
+                <router-link :to="{ path: `/schedule/${s.id}`, query: { from: $route.fullPath } }">
                   • <strong>{{ s.title }}</strong> — {{ s.time }}
                 </router-link>
               </li>
@@ -54,11 +54,13 @@
 <script setup>
 import { ref, computed, watchEffect, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 
 const router = useRouter()
+const route = useRoute()
 const currentFirstDay = ref(getTodayStart())
 const calendarOptions = ref({})
 const weekTitle = ref('')
@@ -115,10 +117,17 @@ watchEffect(() => {
       }
     },
     eventClick: function(info) {
-      router.push(`/schedule/${info.event.id}`)
-    }
+      router.push({
+        path: `/schedule/${info.event.id}`,
+        query: { from: route.fullPath }
+      })
+}
   }
 })
+function goToDetail(id) {
+  sessionStorage.setItem('prevPage', route.fullPath)
+  router.push(`/schedule/${id}`)
+}
 
 function getTodayStart() {
   const d = new Date()

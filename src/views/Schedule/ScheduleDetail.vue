@@ -72,7 +72,12 @@ function formatTime(datetimeStr) {
 }
 
 function goBack() {
-  router.push('/schedule')
+  const from = route.query.from
+  if (from) {
+    router.push(from)
+  } else {
+    router.push('/schedule')
+  }
 }
 
 function goEdit() {
