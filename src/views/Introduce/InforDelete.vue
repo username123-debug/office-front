@@ -45,6 +45,7 @@ const getMe = async () => {
     console.log("ログインユーザーの情報取得(response): ", response);
     myId.value = response.data.id;
     console.log("myId.value:", myId.value)
+    console.log("response",response.data);
   }catch(error){
     console.error("ログインユーザーの情報の取得に失敗: ", error);
   }
@@ -59,12 +60,13 @@ const deleteEmployee = async (id) => {
   }
 
   router.push("/introduce");
-
+ await getData(); // 削除後にデータを再取得
 };
 
 const selectedIds = computed(() => {
   if (!myId.value) return [];
-  return employees.value.filter(user => Number(user.id) !== myId.value);
+  return employees.value.filter(user =>  Number(user.id) !== myId.value && user.deleteFlag !== 'true'
+  )
 });
 
 onMounted(async ()=>{

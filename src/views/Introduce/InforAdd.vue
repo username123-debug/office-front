@@ -72,7 +72,7 @@ const saveData = async () => {
     console.error("ユーザーの追加でエラーが発生：", error);
   }
  
-  
+
   router.push('/introduce'); 
 };
 
@@ -115,10 +115,10 @@ const saveData = async () => {
             <select v-model="employee.myDepartment" required>
               <option>営業部</option>
               <option>人事部</option>
-              <option>経理部</option>
               <option>財務部</option>
-              <option>IT部</option>
               <option>生産部</option>
+              <option>IT部</option>
+              
             </select>
           </div>
 
