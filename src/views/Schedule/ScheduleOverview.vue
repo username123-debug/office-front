@@ -180,10 +180,14 @@ function goToCalendar(userId) {
 
 <style>
 .overview-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
+  position: absolute;
+  top: 60px;
+  left: 260px;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
 }
+
 .week-buttons {
   display: flex;
   justify-content: center;
@@ -211,8 +215,11 @@ function goToCalendar(userId) {
   border-radius: 8px;
   margin-bottom: 24px;
   padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
   background-color: #fdfdfd;
 }
+
 .employee-name {
   margin-bottom: 8px;
   font-weight: bold;
@@ -225,8 +232,8 @@ function goToCalendar(userId) {
   border-radius: 4px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
-  min-width: 800px;
 }
+
 .main-content {
   flex: 1;
   padding: 20px;
@@ -263,4 +270,6 @@ function goToCalendar(userId) {
 .fc-event:hover {
   background-color: #f0f4fa;
 }
+
+
 </style>

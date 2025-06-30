@@ -218,42 +218,42 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 
 
 <style scoped>
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 .container {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
-}
-
-.top-page-wrapper {
-  transform: scale(1.0);
-  transform-origin: top left;
-  width: 1150px;
-  padding: 20px;
-  box-sizing: border-box;
-
+  align-items: center;
   background-image: url('@/assets/schedule/top-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 12px;
 }
-
-
+.top-page-wrapper {
+  width: 1150px;
+  padding: 20px;
+  box-sizing: border-box;
+}
 .week-schedule {
   margin-bottom: 32px;
 }
-
 .week-nav {
   margin-bottom: 16px;
 }
-
 .week-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-bottom: 8px;
 }
-
 .nav-button {
   background-color: #2c3e50;
   color: white;
@@ -267,7 +267,6 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 .nav-button:hover {
   background-color: #1a1a1a;
 }
-
 .week-title {
   text-align: center;
   font-size: 18px;
@@ -275,14 +274,12 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   color: #2c3e50;
   margin-bottom: 16px;
 }
-
 .bottom {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
   margin-top: 32px;
 }
-
 .today-schedule,
 .notice-section {
   flex: 1;
@@ -291,7 +288,6 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   border-radius: 8px;
   padding: 16px;
 }
-
 .today-schedule h2,
 .notice-section h2 {
   margin-bottom: 12px;
@@ -300,19 +296,16 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   padding-left: 8px;
   color: #2c3e50;
 }
-
 .today-schedule ul,
 .notice-section ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .today-schedule li,
 .notice-section li {
   margin: 12px 0;
 }
-
 .today-schedule ul li a,
 .notice-section ul li a {
   color: #2c3e50;
@@ -320,18 +313,15 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   text-decoration: underline;
   font-weight: 500;
 }
-
 .date {
   margin-left: 8px;
   color: #888;
   font-size: 0.85rem;
 }
-
 .more-link-wrapper {
   margin-top: 8px;
   text-align: left;
 }
-
 .more-link {
   color: #1f6feb;
   font-size: 0.9rem;
@@ -341,20 +331,16 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
 .more-link:hover {
   text-decoration: underline;
 }
-
 .fc-sunday-bg {
   background-color: #ffe5e5 !important;
 }
-
 .fc-saturday-bg {
   background-color: #e5f0ff !important;
 }
-
 .fc {
   width: 100% !important;
   table-layout: fixed !important;
 }
-
 .fc-scrollgrid,
 .fc-scrollgrid-sync-table {
   table-layout: fixed !important;
@@ -382,3 +368,4 @@ const formatDate = iso => new Date(iso).toLocaleDateString()
   font-weight: 500;
 }
 </style>
+

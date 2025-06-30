@@ -121,8 +121,11 @@ async function submit() {
 <style scoped>
 .edit-container {
   max-width: 650px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 32px;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
   border: 1px solid #ddd;
   border-radius: 12px;
   background: #ffffff;
