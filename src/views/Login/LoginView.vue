@@ -1,43 +1,3 @@
-<!-- <script setup>
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-import api from '@/plugin/axios.js';
-
-const username=ref('');
-const password=ref('');
-const router = useRouter();
-
-const login = async () => {
-  try{
-    const params = new URLSearchParams();
-    params.append("username",username.value);
-    params.append("password",password.value);
-    const response = await api.post("/api/login",params,{
-      headers:{
-        "Content-Type":"application/x-www-form-urlencoded"
-      }
-    });
-    console.log("ログイン成功:",response);
-    if(response.data.role==="ROLE_USER"){
-      router.push('/');
-      console.log("一般ユーザーのページに遷移")
-    }else if(response.data.role==="ROLE_ADMIN"){
-      //router.push();
-      console.log("管理者のページに遷移");
-    }
-  }catch(error){
-    console.log("error is occurred:",error);
-  }
-};
-</script>
-<template>
-  <form @submit.prevent="login">
-    <p>username:<input v-model="username" /></p>
-    <p>password:<input v-model="password" /></p>
-    <button type="submit">submit</button>
-  </form>
-</template> -->
-
 <script setup>
 // Vue の Composition API から ref をインポート
 import { ref } from 'vue';
@@ -101,13 +61,11 @@ const login = async () => {
   
 <div class="login-hero">
     <div class="hero-content">
-      <!-- <div class="hero-text">
-        <h1>サイボウズのクラウド基盤で、<br>組織の情報共有に安全・安心を。</h1>
-        <p>Safety and security for organizational information</p>
-      </div> -->
+  
     </div>
   
     <form class="login-form" @submit.prevent="login">
+      <img src="@/assets/logo.png" alt="Cybozu Logo" class="logo" />
       <p>username:<input v-model="username" /></p>
       <p>password:<input v-model="password" type="password" /></p>
       <button type="submit">Submit</button>
@@ -115,25 +73,27 @@ const login = async () => {
   </div>
 </template>
 <style scoped>
-.login-background {
-  height: 100vh;
-  background: linear-gradient(to right, #90e0ef, #0077b6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .login-hero {
-  min-height: 100vh;
   width: 90vw;
-  background: linear-gradient(135deg, #90e0ef, #0077b6);
+  height: 100vh;
+  background-image: url('@/assets/man hinh.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* 中央揃え用に flexbox を追加 */
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 40px 20px;
-  font-family: "Helvetica Neue", sans-serif;
-  text-align: center;
+  align-items: center;
+  flex-direction: column; /* 任意：縦に要素を並べたい場合 */
 }
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px; /* 必要に応じて調整 */
+  height: auto;
+}
+
 
 .hero-content {
   margin-bottom: 40px;
@@ -179,7 +139,7 @@ const login = async () => {
 
 
 .login-form {
-  width: 400px;
+  width: 420px;
   padding: 30px;
   border: 2px solid #278bdc;
   border-radius: 12px;
