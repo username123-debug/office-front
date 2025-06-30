@@ -29,15 +29,15 @@
 
     //編集日時の追加の有無?
     const update = async () => {
-        try {
-            const url = `/notices/${noticeId}`;
-            const res = await api.put(url, data);
-            console.log(res.data);
-            router.push('/notice');
-        } catch (error) {
-            console.error(error);
-        }
-    }
+      try {
+        await api.put(`/notices/${noticeId}`, data);
+        console.log('更新成功！');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        router.push('/notice');
+      }
+    };
 
     onMounted(findNotice);
 </script>
@@ -117,4 +117,10 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  .box26 {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+}
 </style>

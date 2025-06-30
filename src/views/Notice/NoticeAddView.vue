@@ -37,6 +37,7 @@
 </script>
 
 <template>
+  <div class="box26">
   <h2>お知らせを追加</h2>
   <p class="title">タイトル</p>
   <input type="text" v-model="data.title" />
@@ -45,7 +46,7 @@
   <p class="length">文字数：{{ data.body.length }}</p>
 
   <button @click="addNotice">追加</button>
-
+</div>
 </template>
 
 <style scoped>
@@ -109,4 +110,12 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .box26 {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+  padding: 0.5em 1em 2em !important;
+}
 </style>

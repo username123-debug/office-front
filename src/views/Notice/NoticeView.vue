@@ -150,15 +150,15 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-  .container {
-    width: 100%;
-    clear: both;
-  }
-
-  .container2 {
-    width: 100%;
-    margin: 0 auto;
-  }
+.container,
+.container2,
+.main {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
 
   .main {
     padding: 2px;
@@ -212,14 +212,10 @@ onMounted(async () => {
   }
 
 
-  .table1 {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    max-width: 700px;
-    overflow: hidden;
-    text-align: center;
-  }
+.table1 {
+  width: 100% !important;
+  max-width: none !important;
+}
 
   .table1 tr {
     background-color: #e6f1f6;
@@ -316,4 +312,5 @@ onMounted(async () => {
     opacity: 0.5;
     cursor: not-allowed;
   }
+  
 </style>

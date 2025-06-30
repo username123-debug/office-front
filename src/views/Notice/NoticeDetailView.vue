@@ -136,11 +136,12 @@ const notice = reactive({
 </template>
 
 <style>
-  .container2 {
-    width: 100%;
-    height: 550px;
-  }
-
+.container2 {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+}
   h2 {
     color: rgb(22, 121, 182);
     font-family: inherit;
@@ -160,14 +161,18 @@ const notice = reactive({
     height: 500px;
   }
 
-  .box26 {
-    position: relative;
-    margin: 2em 0;
-    padding: 0.5em 1em;
-    border: solid 3px #95ccff;
-    border-radius: 8px;
-    height: 60%;
-  }
+.box26 {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+  position: relative;
+  margin: 2em 0;
+  padding: 0.5em 1em;
+  border: solid 3px #95ccff;
+  border-radius: 8px;
+  height: 60%;
+}
 
   .box26 .box-title {
     position: absolute;
@@ -187,15 +192,15 @@ const notice = reactive({
     padding: 0;
   }
 
-  .date {
-    border: 2px solid black;
-    width: 35%;
-  }
-
-  .writer {
-    border: 2px solid black;
-    width: 35%;
-  }
+.date,
+.writer {
+  width: 93vw !important;
+  max-width: none !important;
+  margin: 0.5em auto !important;
+  box-sizing: border-box;
+  padding: 0.5em;
+  border: 2px solid black;
+}
 
   .back {
     text-align: right;
