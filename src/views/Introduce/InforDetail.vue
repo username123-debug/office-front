@@ -155,7 +155,7 @@ onMounted(()=>{
       <h2>社員紹介</h2>
       <ul class="menu">
          <li><router-link to="/introduce">ホーム</router-link></li>
-        <li><a href="#">新入社員</a></li>
+        <!-- <li><a href="#">新入社員</a></li> -->
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>

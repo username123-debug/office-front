@@ -78,8 +78,8 @@ onMounted(()=>{
     <aside class="sidebar" >
       <h2>社員紹介</h2>
       <ul class="menu">
-        <li><a href="#">ホーム</a></li>
-        <li><a href="#">新入社員</a></li>
+        <li><a href="/introduce">ホーム</a></li>
+        <!-- <li><a href="#">新入社員</a></li> -->
 
         <li>
           <a href="javascript:void(0)" @click="selectedDepartment = '営業部'">営業部門</a>
@@ -199,7 +199,7 @@ onMounted(()=>{
 /* 左サイドバー */
 .sidebar {
   width: 250px;
-  height: 180vh;
+  height: 250vh;
   background-color: #129350;
   color: white;
   padding: 20px;
